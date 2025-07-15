@@ -1,12 +1,13 @@
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const navLinks = [
-    { name: "Inicio", href: "/" },
-    { name: "Características", href: "/features" },
-    { name: "Precios", href: "/pricing" },
-    { name: "Sobre Nosotros", href: "/about" },
-    { name: "Contacto", href: "/contact" }
+    { name: "Inicio", to: "/" },
+    { name: "Características", to: "/features" },
+    { name: "Precios", to: "/pricing" },
+    { name: "Sobre Nosotros", to: "/about" },
+    { name: "Contacto", to: "/contact" }
 ]
 
 export default function Header() {
@@ -31,9 +32,9 @@ export default function Header() {
                             <nav className="flex items-center">
                                 <ul className="flex space-x-4 gap-3">
                                     {navLinks.map(link => (
-                                        <li key={link.href}>
-                                            <a href={link.href}
-                                                className="text-white hover:text-gray-300 transition-colors text-sm whitespace-nowrap px-[10px] py-[5px]">{link.name}</a>
+                                        <li key={link.to}>
+                                            <Link to={link.to}
+                                                className="text-white hover:text-gray-300 transition-colors text-sm whitespace-nowrap px-[10px] py-[5px]">{link.name}</Link>
                                         </li>
                                     ))}
                                 </ul>
@@ -49,7 +50,11 @@ export default function Header() {
                             <Button variant="ghost" className="text-sm">
                                 <a href="#">Iniciar Sesión</a>
                             </Button>
-                            <Button variant="secondary" className="text-sm">Empezar ahora</Button>
+                            <Button variant="secondary" className="text-sm">
+                                <Link to="/dashboard">
+                                    Empezar ahora
+                                </Link>
+                            </Button>
                         </div>
                     </div>
                 </div>
