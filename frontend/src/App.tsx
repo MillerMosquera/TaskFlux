@@ -5,12 +5,9 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import Dashboard from "@/app/layout/Dashboard.tsx";
 import DashboardGoal from "@/features/dashboard/views/DashboardGoalView";
 import { DashboardHome } from "@/features/dashboard/views/DashboardHomeView";
-import { DesignEngineeringView } from "@/features/dashboard/views/DesignEngineeringView.tsx";
-import { DocumentationView } from "@/features/dashboard/views/DocumentationView.tsx";
+import { CalendarioView } from "@/features/dashboard/views/CalendarioView";
 import { PlaygroundView } from "@/features/dashboard/views/HomeView";
-import { SalesMarketingView } from "@/features/dashboard/views/SalesMarketingView.tsx";
-import { SettingsView } from "@/features/dashboard/views/SettingsView.tsx";
-import { TravelView } from "@/features/dashboard/views/TravelView.tsx";
+import { EquipoView } from "@/features/dashboard/views/EquipoView";
 import './App.css';
 
 function App() {
@@ -29,11 +26,8 @@ function App() {
                     <Route index element={<DashboardHome/>} />
                     <Route path="playground" element={<PlaygroundView/>} />
                     <Route path="metas" element={<DashboardGoal/>} />
-                    <Route path="documentation" element={<DocumentationView/>} />
-                    <Route path="settings" element={<SettingsView/>} />
-                    <Route path="design-engineering" element={<DesignEngineeringView/>} />
-                    <Route path="sales-marketing" element={<SalesMarketingView/>} />
-                    <Route path="travel" element={<TravelView/>} />
+                    <Route path="calendario" element={<CalendarioView/>} />
+                    <Route path="equipo" element={<EquipoView/>} />
                 </Route>
             </Routes>
         );

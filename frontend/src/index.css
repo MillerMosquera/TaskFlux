@@ -191,11 +191,6 @@ body {
 
 @layer components {
 
-  /* Glass Effect */
-  .glass-effect {
-    @apply backdrop-blur-md bg-background/80 border border-border/50;
-  }
-
   /* Smoke Effect */
   .smoke-effect {
     position: relative;

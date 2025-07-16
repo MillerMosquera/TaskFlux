@@ -1,4 +1,3 @@
-"use client"
 
 import { useApp, type Task } from "@/app/context/app-context"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -312,7 +311,7 @@ export function TaskModal({ open, onOpenChange, task, listId }: TaskModalProps) 
                                         {dueDate ? format(dueDate, "PPP") : "Seleccionar una fecha"}
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0 glass-effect">
+                                <PopoverContent className="w-auto p-0">
                                     <Calendar mode="single" selected={dueDate} onSelect={setDueDate} initialFocus />
                                 </PopoverContent>
                             </Popover>
