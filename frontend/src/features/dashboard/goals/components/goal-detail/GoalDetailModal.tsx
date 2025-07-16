@@ -1,5 +1,3 @@
-// GoalDetailModal.tsx
-"use client"
 
 import { useApp } from "@/app/context/app-context"
 import { Button } from "@/components/ui/button"
