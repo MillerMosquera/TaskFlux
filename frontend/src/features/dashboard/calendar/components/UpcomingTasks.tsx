@@ -1,0 +1,73 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { User } from "lucide-react"
+
+
+export function UpcomingTasks({ tasks, users }: UpcomingTasksProps) {
+  const priorityColors = {
+    low: "bg-green-500",
+    medium: "bg-yellow-500",
+    high: "bg-red-500",
+    urgent: "bg-purple-500",
+  }
+
+  const getAssignee = (assigneeId?: string) => {
+    return users.find((u) => u.id === assigneeId)
+  }
+
+  const tasksWithDates = tasks.filter((task) => task.dueDate)
+
+  const upcomingTasks = tasksWithDates
+    .filter((task) => new Date(task.dueDate!) >= new Date())
+    .sort((a, b) => new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime())
+    .slice(0, 10)
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Upcoming Tasks</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-3">
+          {upcomingTasks.map((task) => {
+            const assignee = getAssignee(task.assigneeId)
+            const daysUntilDue = Math.ceil(
+              (new Date(task.dueDate!).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
+            )
+
+            return (
+              <div key={task.id} className="flex items-center gap-3 p-3 rounded-lg border">
+                <div
+                  className={`w-3 h-3 rounded-full ${
+                    priorityColors[task.priority as keyof typeof priorityColors]
+                  }`}
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium truncate">{task.title}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Due {new Date(task.dueDate!).toLocaleDateString()}
+                    {daysUntilDue === 0 && " (Today)"}
+                    {daysUntilDue === 1 && " (Tomorrow)"}
+                    {daysUntilDue > 1 && ` (${daysUntilDue} days)`}
+                  </p>
+                </div>
+                {assignee && (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <User className="h-4 w-4" />
+                    {assignee.name}
+                  </div>
+                )}
+                <Badge variant="secondary" className="capitalize">
+                  {task.status.replace("-", " ")}
+                </Badge>
+              </div>
+            )
+          })}
+          {upcomingTasks.length === 0 && (
+            <p className="text-center text-muted-foreground py-4">No upcoming tasks</p>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
