@@ -76,7 +76,7 @@ export function TeamMemberCard({ user }: TeamMemberCardProps) {
               >
                 {stats.totalTasks}
               </motion.p>
-              <p className="text-xs text-muted-foreground">Total Tasks</p>
+              <p className="text-xs text-muted-foreground"> Tareas</p>
             </motion.div>
             <motion.div
               whileHover={{ scale: 1.05 }}
@@ -90,14 +90,13 @@ export function TeamMemberCard({ user }: TeamMemberCardProps) {
               >
                 {stats.completedTasks}
               </motion.p>
-              <p className="text-xs text-muted-foreground">Completed</p>
+              <p className="text-xs text-muted-foreground">Completadas</p>
             </motion.div>
           </motion.div>
 
-          {/* Completion Rate */}
           <motion.div variants={statsVariants} className="space-y-2">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Completion Rate</span>
+              <span className="text-muted-foreground">Tasa de finalización</span>
               <motion.span 
                 className="font-medium"
                 initial={{ opacity: 0 }}
@@ -119,7 +118,7 @@ export function TeamMemberCard({ user }: TeamMemberCardProps) {
             </motion.div>
           </motion.div>
 
-          {/* Overdue Tasks */}
+          {/* Vencimiento */}
           {stats.overdueTasks > 0 && (
             <motion.div 
               className="flex items-center gap-2 text-sm text-red-600"
@@ -134,7 +133,7 @@ export function TeamMemberCard({ user }: TeamMemberCardProps) {
               >
                 <Clock className="h-4 w-4" />
               </motion.div>
-              {stats.overdueTasks} overdue task{stats.overdueTasks !== 1 ? "s" : ""}
+              {stats.overdueTasks} Tarea atrasada{stats.overdueTasks !== 1 ? "s" : ""}
             </motion.div>
           )}
 
@@ -146,7 +145,7 @@ export function TeamMemberCard({ user }: TeamMemberCardProps) {
             transition={{ delay: 0.85 }}
           >
             <Calendar className="h-4 w-4" />
-            Joined {new Date(user.joinedAt).toLocaleDateString()}
+            Se unió el {new Date(user.joinedAt).toLocaleDateString()}
           </motion.div>
 
           {/* Contact */}
@@ -157,7 +156,7 @@ export function TeamMemberCard({ user }: TeamMemberCardProps) {
           >
             <Button variant="outline" size="sm" className="w-full bg-transparent hover:bg-accent">
               <Mail className="h-4 w-4 mr-2" />
-              Contact
+              Contacto
             </Button>
           </motion.div>
         </CardContent>

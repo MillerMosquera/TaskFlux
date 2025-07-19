@@ -17,6 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
+import { es } from "date-fns/locale"
 import { AnimatePresence, motion } from "framer-motion"
 import { CalendarIcon, Clock, Flag, Loader2, Plus, Save, Tag, User, X } from "lucide-react"
 import type React from "react"
@@ -36,7 +37,7 @@ export function TaskModal({ open, onOpenChange, task, listId }: TaskModalProps) 
     const [formData, setFormData] = useState({
         title: task?.title || "",
         description: task?.description || "",
-        priority: task?.priority || "medium",
+        priority: task?.priority || "bajo",
         assigneeId: task?.assigneeId || "",
         dueDate: task?.dueDate || "",
         estimatedTime: task?.estimatedTime || 0,
@@ -94,7 +95,7 @@ export function TaskModal({ open, onOpenChange, task, listId }: TaskModalProps) 
         setFormData({
             title: "",
             description: "",
-            priority: "medium",
+            priority: "bajo",
             assigneeId: "",
             dueDate: "",
             estimatedTime: 0,
@@ -308,7 +309,7 @@ export function TaskModal({ open, onOpenChange, task, listId }: TaskModalProps) 
                                         )}
                                     >
                                         <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {dueDate ? format(dueDate, "PPP") : "Seleccionar una fecha"}
+                                        {dueDate ? format(dueDate, "PPP", { locale: es }) : "Seleccionar una fecha"}
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0">
@@ -374,7 +375,7 @@ export function TaskModal({ open, onOpenChange, task, listId }: TaskModalProps) 
                             <Input
                                 value={newTag}
                                 onChange={(e) => setNewTag(e.target.value)}
-                                placeholder="Add a tag..."
+                                placeholder="Agregar etiqueta..."
                                 className="transition-all duration-200 focus:ring-2 focus:ring-primary/20"
                                 onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addTag())}
                             />
@@ -405,7 +406,7 @@ export function TaskModal({ open, onOpenChange, task, listId }: TaskModalProps) 
                                             className="flex items-center gap-2"
                                         >
                                             <Loader2 className="h-4 w-4 animate-spin" />
-                                            {task ? "Updating..." : "Creating..."}
+                                            {task ? "Actualizando..." : "Creando..."}
                                         </motion.div>
                                     ) : (
                                         <motion.div

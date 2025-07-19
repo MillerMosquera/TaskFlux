@@ -8,15 +8,15 @@ interface CalendarHeaderProps {
 
 export function CalendarHeader({ currentDate, onNavigateMonth }: CalendarHeaderProps) {
   const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
   ]
 
   return (
     <div className="flex items-center justify-between">
       <div>
-        <h1 className="text-3xl font-bold">Calendar</h1>
-        <p className="text-muted-foreground mt-1">View your tasks and deadlines</p>
+        <h1 className="text-3xl font-bold">Calendario</h1>
+        <p className="text-muted-foreground mt-1">Ver sus tareas y plazos</p>
       </div>
       <div className="flex items-center gap-2">
         <Button variant="outline" size="sm" onClick={() => onNavigateMonth("prev")}>

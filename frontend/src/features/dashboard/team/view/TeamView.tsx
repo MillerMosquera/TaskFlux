@@ -1,4 +1,3 @@
-"use client"
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -30,8 +29,8 @@ export function TeamView() {
 
   const teamStats = {
     totalMembers: state.users.length,
-    activeMembers: state.users.filter((u) => u.status === "active").length,
-    admins: state.users.filter((u) => u.role === "admin").length,
+    activeMembers: state.users.filter((u) => u.status === "activo").length,
+    admins: state.users.filter((u) => u.role === "administrador").length,
     avgCompletion: Math.round(
       state.users.reduce((acc, user) => {
         const stats = getUserStats(user.id)
@@ -47,19 +46,19 @@ export function TeamView() {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold">Team</h1>
-              <p className="text-muted-foreground mt-1">Manage your team members and collaboration</p>
+              <h1 className="text-3xl font-bold">Equipo</h1>
+              <p className="text-muted-foreground mt-1">Administra a los miembros de tu equipo y la colaboración</p>
             </div>
             <Button onClick={() => setInviteModalOpen(true)}>
               <UserPlus className="h-4 w-4 mr-2" />
-              Invite Member
+              Invitar Miembro
             </Button>
           </div>
 
-          {/* Team Stats */}
+          {/* Estadísticas del Equipo */}
           <TeamStats {...teamStats} />
 
-          {/* Team Members */}
+          {/* Miembros del Equipo */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {state.users.map((user) => {
               const stats = getUserStats(user.id)

@@ -93,7 +93,7 @@ export function UpcomingDeadlines({ items }: Props) {
                         >
                             <Zap className="h-5 w-5 text-orange-500" />
                         </motion.div>
-                        Upcoming Deadlines
+                        Próximos fechas límite
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -116,10 +116,10 @@ export function UpcomingDeadlines({ items }: Props) {
                                     >
                                         <Calendar className="h-12 w-12 mx-auto mb-2 opacity-50" />
                                     </motion.div>
-                                    <p>No upcoming deadlines</p>
+                                    <p>No hay fechas límite próximas</p>
                                 </motion.div>
                             ) : (
-                                items.map((item, index) => (
+                                items.map((item) => (
                                 <motion.div
                                     key={item.id}
                                     variants={itemVariants}

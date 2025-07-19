@@ -1,5 +1,5 @@
+import { Goal, Target } from "@/features/dashboard/goals/utils/types"
 import { calculateProgress } from "../utils/goalHelper"
-import { Target, Goal } from "@/features/dashboard/goals/utils/types"
 
 export function useTargetManagement(
     goal: Goal | null,
@@ -35,6 +35,18 @@ export function useTargetManagement(
 
         const newProgress = calculateProgress(updatedTargets)
 
+        // Determine new status based on progress
+        let newStatus = goal.status
+        if (newProgress === 100) {
+            newStatus = "completado"
+        } else if (goal.status === "completado") {
+            // If goal was completed but now progress is not 100%, change to "en-progreso"
+            newStatus = "en-progreso"
+        } else if (goal.status === "no-iniciado" && newProgress > 0) {
+            // If goal was not started but now has progress, change to "en-progreso"
+            newStatus = "en-progreso"
+        }
+
         dispatch({
             type: "UPDATE_GOAL",
             payload: {
@@ -42,7 +54,7 @@ export function useTargetManagement(
                 updates: {
                     targets: updatedTargets,
                     progress: newProgress,
-                    status: newProgress === 100 ? "completed" : goal.status === "not-started" ? "in-progress" : goal.status,
+                    status: newStatus,
                 },
             },
         })
@@ -54,6 +66,21 @@ export function useTargetManagement(
         const updatedTargets = goal.targets.filter((target) => target.id !== targetId)
         const newProgress = calculateProgress(updatedTargets)
 
+        // Determine new status based on progress
+        let newStatus = goal.status
+        if (newProgress === 100) {
+            newStatus = "completado"
+        } else if (goal.status === "completado") {
+            // If goal was completed but now progress is not 100%, change to "en-progreso"
+            newStatus = "en-progreso"
+        } else if (goal.status === "no-iniciado" && newProgress > 0) {
+            // If goal was not started but now has progress, change to "en-progreso"
+            newStatus = "en-progreso"
+        } else if (newProgress === 0 && updatedTargets.length === 0) {
+            // If no targets remain, revert to "no-iniciado"
+            newStatus = "no-iniciado"
+        }
+
         dispatch({
             type: "UPDATE_GOAL",
             payload: {
@@ -61,6 +88,7 @@ export function useTargetManagement(
                 updates: {
                     targets: updatedTargets,
                     progress: newProgress,
+                    status: newStatus,
                 },
             },
         })

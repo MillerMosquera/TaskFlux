@@ -61,7 +61,7 @@ export function CalendarDayCell({ day, users }: CalendarDayCellProps) {
           )
         })}
         {day.tasks.length > 3 && (
-          <div className="text-xs text-muted-foreground text-center">+{day.tasks.length - 3} more</div>
+          <div className="text-xs text-muted-foreground text-center">+{day.tasks.length - 3} más</div>
         )}
       </div>
     </div>

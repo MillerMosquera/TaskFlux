@@ -99,14 +99,14 @@ export function RecentTasks({ tasks }: Props) {
                             >
                                 <Activity className="h-5 w-5 text-primary" />
                             </motion.div>
-                            Recent Tasks
+                            Tareas Recientes
                         </CardTitle>
                         <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => dispatch({ type: "SET_CURRENT_VIEW", payload: "tasks" })}
+                            onClick={() => dispatch({ type: "SET_CURRENT_VIEW", payload: "tareas" })}
                         >
-                            View All
+                            Ver Todo
                         </Button>
                     </div>
                 </CardHeader>
@@ -130,8 +130,8 @@ export function RecentTasks({ tasks }: Props) {
                                     >
                                         <CheckCircle className="h-12 w-12 mx-auto mb-2 opacity-50" />
                                     </motion.div>
-                                    <p>No pending tasks</p>
-                                    <p className="text-sm">Great job staying on top of things!</p>
+                                    <p>No hay tareas pendientes</p>
+                                    <p className="text-sm">¡Buen trabajo manteniéndote al tanto de las cosas!</p>
                                 </motion.div>
                             ) : (
                                 tasks.map((task) => (
@@ -149,7 +149,7 @@ export function RecentTasks({ tasks }: Props) {
                                         style={{ perspective: "1000px" }}
                                         onClick={() => {
                                             dispatch({ type: "SET_CURRENT_LIST", payload: task.listId })
-                                            dispatch({ type: "SET_CURRENT_VIEW", payload: "tasks" })
+                                            dispatch({ type: "SET_CURRENT_VIEW", payload: "tareas" })
                                         }}
                                     >
                                         <motion.div

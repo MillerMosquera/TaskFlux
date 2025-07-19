@@ -8,7 +8,7 @@ export interface GoalDetailModalProps {
 export interface GoalFormData {
   title: string
   description: string
-  status: "not-started" | "in-progress" | "completed" | "on-hold"
+  status: "no-iniciado" | "en-progreso" | "completado" | "en-espera"
   progress: number
   spaceId: string
   ownerId: string
@@ -25,7 +25,7 @@ export interface Goal {
   id: string
   title: string
   description?: string
-  status: "not-started" | "in-progress" | "completed" | "on-hold"
+  status: "no-iniciado" | "en-progreso" | "completado" | "en-espera"
   progress: number
   spaceId: string
   ownerId: string

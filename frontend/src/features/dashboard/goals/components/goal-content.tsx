@@ -1,7 +1,7 @@
 import { GoalListItem } from "@/features/dashboard/goals/components/goal-list";
 import { KanbanColumn } from "@/features/dashboard/goals/components/kanban";
 import { useFilteredSortedGoals } from "../hooks/useFilteredSortedGoals";
-import { Goal, SortBy, ViewMode } from "../utils/GoalType";
+import { Goal, SortBy, ViewMode } from "../utils/goalType";
 import { GoalCard } from "./goal-card";
 
 
@@ -66,7 +66,7 @@ export const GoalContent = ({
             {viewMode === "kanban" && (
                 <div className="w-full overflow-hidden">
                     <div className="flex gap-4 pb-4 w-full">
-                        {["not-started", "in-progress", "on-hold", "completed"].map((status, columnIndex) => (
+                        {["no-iniciado", "en-progreso", "en-espera", "completado"].map((status, columnIndex) => (
                             <div
                                 key={status}
                                 className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex-1"

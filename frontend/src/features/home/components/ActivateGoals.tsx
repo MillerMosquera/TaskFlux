@@ -124,7 +124,7 @@ export function ActiveGoals({ goals }: Props) {
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: 0.3, duration: 0.6 }}
                                 >
-                                    Active Goals
+                                    Metas Activos
                                 </motion.span>
                             </CardTitle>
                             <motion.div
@@ -135,10 +135,10 @@ export function ActiveGoals({ goals }: Props) {
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => dispatch({ type: "SET_CURRENT_VIEW", payload: "goals" })}
+                                    onClick={() => dispatch({ type: "SET_CURRENT_VIEW", payload: "metas" })}
                                     className="hover:bg-primary/10 transition-colors"
                                 >
-                                    View All
+                                    Ver Todo
                                 </Button>
                             </motion.div>
                         </div>
@@ -158,8 +158,8 @@ export function ActiveGoals({ goals }: Props) {
                                         transition={{ delay: 0.7, duration: 0.5 }}
                                     >
                                         <Target className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                                        <p>No active goals</p>
-                                        <p className="text-sm">Set your first goal to get started!</p>
+                                        <p>No hay metas activas</p>
+                                        <p className="text-sm">¡Establece tu primera meta para comenzar!</p>
                                     </motion.div>
                                 </motion.div>
                             ) : (
@@ -177,7 +177,7 @@ export function ActiveGoals({ goals }: Props) {
                                             whileHover="hover"
                                             whileTap="tap"
                                             className="p-4 rounded-lg border hover:shadow-md transition-all cursor-pointer group bg-card/50 backdrop-blur-sm"
-                                            onClick={() => dispatch({ type: "SET_CURRENT_VIEW", payload: "goals" })}
+                                            onClick={() => dispatch({ type: "SET_CURRENT_VIEW", payload: "metas" })}
                                         >
                                             <div className="space-y-3">
                                                 <div className="flex items-center justify-between">
@@ -206,7 +206,7 @@ export function ActiveGoals({ goals }: Props) {
                                                         animate={{ opacity: 1, y: 0 }}
                                                         transition={{ delay: index * 0.1 + 1.0, duration: 0.4 }}
                                                     >
-                                                        <span className="text-muted-foreground">Progress</span>
+                                                        <span className="text-muted-foreground">Progreso</span>
                                                         <span className="font-medium">{goal.progress}%</span>
                                                     </motion.div>
                                                     <motion.div
@@ -226,7 +226,7 @@ export function ActiveGoals({ goals }: Props) {
                                                         transition={{ delay: index * 0.1 + 1.2, duration: 0.4 }}
                                                     >
                                                         <Calendar className="h-3 w-3" />
-                                                        <span>Due {getDateLabel(goal.dueDate)}</span>
+                                                        <span>Vence {getDateLabel(goal.dueDate)}</span>
                                                     </motion.div>
                                                 )}
                                             </div>

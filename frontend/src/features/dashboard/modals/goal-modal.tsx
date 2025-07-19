@@ -24,7 +24,7 @@ export function GoalModal({ open, onOpenChange }: GoalModalProps) {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    status: "not-started" as const,
+    status: "no-iniciado" as const,
     progress: 0,
     spaceId: state.currentSpace,
     ownerId: state.currentUser.id,
@@ -64,7 +64,7 @@ export function GoalModal({ open, onOpenChange }: GoalModalProps) {
     setFormData({
       title: "",
       description: "",
-      status: "not-started",
+      status: "no-iniciado",
       progress: 0,
       spaceId: state.currentSpace,
       ownerId: state.currentUser.id,
@@ -105,23 +105,23 @@ export function GoalModal({ open, onOpenChange }: GoalModalProps) {
           {/* Basic Info */}
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Goal Title *</Label>
+              <Label htmlFor="title">Título del Objetivo *</Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
-                placeholder="Enter goal title..."
+                placeholder="Ingrese el título del objetivo..."
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">Descripción</Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
-                placeholder="Describe your goal..."
+                placeholder="Describe tu objetivo..."
                 rows={3}
               />
             </div>
@@ -130,7 +130,7 @@ export function GoalModal({ open, onOpenChange }: GoalModalProps) {
           {/* Settings */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Status</Label>
+              <Label>Estados</Label>
               <Select
                 value={formData.status}
                 onValueChange={(value) => setFormData((prev) => ({ ...prev, status: value as any }))}
@@ -139,16 +139,16 @@ export function GoalModal({ open, onOpenChange }: GoalModalProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="not-started">Not Started</SelectItem>
-                  <SelectItem value="in-progress">In Progress</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="on-hold">On Hold</SelectItem>
+                  <SelectItem value="no-iniciado">No Iniciado</SelectItem>
+                  <SelectItem value="en-progreso">En Progreso</SelectItem>
+                  <SelectItem value="completado">Completado</SelectItem>
+                  <SelectItem value="en-espera">En Espera</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label>Owner</Label>
+              <Label>Propietario</Label>
               <Select
                 value={formData.ownerId}
                 onValueChange={(value) => setFormData((prev) => ({ ...prev, ownerId: value }))}
@@ -173,7 +173,7 @@ export function GoalModal({ open, onOpenChange }: GoalModalProps) {
             </div>
 
             <div className="space-y-2">
-              <Label>Space</Label>
+              <Label>Espacio</Label>
               <Select
                 value={formData.spaceId}
                 onValueChange={(value) => setFormData((prev) => ({ ...prev, spaceId: value }))}
@@ -192,7 +192,7 @@ export function GoalModal({ open, onOpenChange }: GoalModalProps) {
             </div>
 
             <div className="space-y-2">
-              <Label>Due Date</Label>
+              <Label>Fecha de Vencimiento</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -212,12 +212,12 @@ export function GoalModal({ open, onOpenChange }: GoalModalProps) {
 
           {/* Targets */}
           <div className="space-y-4">
-            <Label>Targets (Optional)</Label>
+            <Label>Objetivos (Opcional)</Label>
 
             {/* Add Target */}
             <div className="flex gap-2">
               <Input
-                placeholder="Add a target..."
+                placeholder="Agregar un objetivo..."
                 value={newTargetTitle}
                 onChange={(e) => setNewTargetTitle(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addTarget())}
@@ -269,7 +269,7 @@ export function GoalModal({ open, onOpenChange }: GoalModalProps) {
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancelar
             </Button>
-            <Button type="submit">Create Goal</Button>
+            <Button type="submit">Crear Objetivo</Button>
           </div>
         </form>
         </div>

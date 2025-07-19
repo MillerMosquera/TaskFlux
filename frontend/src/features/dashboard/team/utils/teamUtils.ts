@@ -1,4 +1,4 @@
-import { useApp } from "@/app/context/app-context"
+import { Activity, CheckCircle, Users } from "lucide-react"
 
 export const getRoleColor = (role: string) => {
     switch (role) {
@@ -29,11 +29,45 @@ export const getUserStats = (userId: string, state: any) => {
 }
 
 export interface TeamStatsProps {
-  totalMembers: number
-  activeMembers: number
-  admins: number
-  avgCompletion: number
+  stats: {
+    totalMembers: number
+    activeMembers: number
+    admins: number
+    avgCompletion: number
+  }
 }
+
+
+export const statCards = (stats: TeamStatsProps["stats"]) => [
+    {
+        title: "Total de Miembros",
+        value: `${stats.totalMembers}`,
+        icon: Users,
+        color: "",
+        bgColor: "",
+    },
+    {
+        title: "Miembros Activos",
+        value: `${stats.activeMembers}`,
+        icon: Activity,
+        color: "text-green-600",
+        bgColor: "bg-green-100 dark:bg-green-900/20",
+    },
+    {
+        title: "Administradores",
+        value: `${stats.admins}`,
+        icon: Users,
+        color: "text-blue-600",
+        bgColor: "bg-blue-100 dark:bg-blue-900/20",
+    },
+    {
+        title: "Promedio de Finalización",
+        value: `${stats.avgCompletion}%`,
+        icon: CheckCircle,
+        color: "text-red-600",
+        bgColor: "bg-red-100 dark:bg-red-900/20",
+    },
+]
 
 interface User {
   id: string

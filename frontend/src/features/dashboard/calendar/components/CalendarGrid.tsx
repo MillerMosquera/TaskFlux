@@ -5,7 +5,7 @@ import { CalendarDayCell } from "./CalendarDayCell"
 export function CalendarGrid({ currentDate, tasks, users }: CalendarGridProps) {
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
-  // Get tasks with due dates
+  
   const tasksWithDates = tasks.filter((task) => task.dueDate)
 
   // Group tasks by date
@@ -59,7 +59,7 @@ export function CalendarGrid({ currentDate, tasks, users }: CalendarGridProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Calendar className="h-5 w-5" />
-          Task Calendar
+          Calendario de tareas
         </CardTitle>
       </CardHeader>
       <CardContent>

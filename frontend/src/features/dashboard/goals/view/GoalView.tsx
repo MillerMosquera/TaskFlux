@@ -12,7 +12,7 @@ import { containerVariants } from "../../../home/utils/variants"
 import { Controls } from "../components/controls"
 import { GoalContent } from "../components/goal-content"
 import { GoalDetailModal } from "../components/goal-detail/GoalDetailModal"
-import { SortBy, ViewMode } from "../utils/GoalType"
+import { SortBy, ViewMode } from "../utils/goalType"
 
 export function GoalsView() {
     const { state } = useApp()
@@ -20,8 +20,8 @@ export function GoalsView() {
     const [selectedGoalId, setSelectedGoalId] = useState<string>("")
     const [goalDetailOpen, setGoalDetailOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState("")
-    const [statusFilter, setStatusFilter] = useState<string>("all")
-    const [sortBy, setSortBy] = useState<SortBy>("dueDate")
+    const [statusFilter, setStatusFilter] = useState<string>("todos")
+    const [sortBy, setSortBy] = useState<SortBy>("fechaCreacion")
     const [viewMode, setViewMode] = useState<ViewMode>("grid")
 
     const spaceGoals = state.goals.filter((goal) => goal.spaceId === state.currentSpace)
@@ -39,23 +39,23 @@ export function GoalsView() {
         }
 
         // Filter by status
-        if (statusFilter !== "all") {
+        if (statusFilter !== "todos") {
             filtered = filtered.filter((goal) => goal.status === statusFilter)
         }
 
         // Sort
         filtered.sort((a, b) => {
             switch (sortBy) {
-                case "dueDate":
+                case "fechaVencimiento":
                     if (!a.dueDate && !b.dueDate) return 0
                     if (!a.dueDate) return 1
                     if (!b.dueDate) return -1
                     return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
-                case "progress":
+                case "progreso":
                     return b.progress - a.progress
-                case "title":
+                case "titulo":
                     return a.title.localeCompare(b.title)
-                case "createdAt":
+                case "fechaCreacion":
                     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                 default:
                     return 0
@@ -117,15 +117,15 @@ export function GoalsView() {
                     transition={{ delay: 0.3 }}
                 >
                     <Target className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                    <h3 className="text-lg font-medium mb-2">No goals found</h3>
+                    <h3 className="text-lg font-medium mb-2">No se encontraron metas</h3>
                     <p className="text-muted-foreground mb-4">
-                        {searchQuery || statusFilter !== "all"
-                            ? "Try adjusting your filters or search query."
-                            : "Create your first goal to get started with tracking your objectives."}
+                        {searchQuery || statusFilter !== "todos"
+                            ? "Intenta ajustar tus filtros o búsqueda."
+                            : "Crea tu primera meta para comenzar a rastrear tus objetivos."}
                     </p>
                     <Button onClick={() => setGoalModalOpen(true)}>
                         <Plus className="h-4 w-4 mr-2" />
-                        Create Goal
+                        Crear Meta
                     </Button>
                 </motion.div>
             )}

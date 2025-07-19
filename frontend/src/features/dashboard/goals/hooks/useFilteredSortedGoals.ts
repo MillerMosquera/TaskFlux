@@ -1,4 +1,4 @@
-import { Goal, SortBy } from "@/features/dashboard/goals/utils/GoalType"
+import { Goal, SortBy } from "@/features/dashboard/goals/utils/goalType"
 import { useMemo } from "react"
 
 export const useFilteredSortedGoals = ({
@@ -22,21 +22,21 @@ export const useFilteredSortedGoals = ({
       )
     }
 
-    if (filter !== "all") {
+    if (filter !== "todos") {
       filtered = filtered.filter((goal) => goal.status === filter)
     }
 
     filtered.sort((a, b) => {
       switch (sort) {
-        case "dueDate":
+        case "fechaVencimiento":
           if (!a.dueDate) return 1
           if (!b.dueDate) return -1
           return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
-        case "progress":
+        case "progreso":
           return b.progress - a.progress
-        case "title":
+        case "titulo":
           return a.title.localeCompare(b.title)
-        case "createdAt":
+        case "fechaCreacion":
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         default:
           return 0

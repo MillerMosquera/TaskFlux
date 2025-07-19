@@ -12,7 +12,7 @@ export const StatsCardsGoal = () => {
         {
             icon: Target,
             value: stats.total,
-            label: "Total Goals",
+            label: "Objetivos",
             color: "text-primary",
             bgColor: "bg-primary/10",
             hoverColor: "hover:bg-primary/20",
@@ -20,7 +20,7 @@ export const StatsCardsGoal = () => {
         {
             icon: CheckCircle,
             value: stats.completed,
-            label: "Completed",
+            label: "Completado",
             color: "text-green-600",
             bgColor: "bg-green-100",
             hoverColor: "hover:bg-green-200",
@@ -28,7 +28,7 @@ export const StatsCardsGoal = () => {
         {
             icon: TrendingUp,
             value: stats.inProgress,
-            label: "In Progress",
+            label: "En Progreso",
             color: "text-blue-600",
             bgColor: "bg-blue-100",
             hoverColor: "hover:bg-blue-200",
@@ -36,7 +36,7 @@ export const StatsCardsGoal = () => {
         {
             icon: AlertCircle,
             value: stats.overdue,
-            label: "Overdue",
+            label: "Atrasado",
             color: "text-red-600",
             bgColor: "bg-red-100",
             hoverColor: "hover:bg-red-200",
@@ -44,7 +44,7 @@ export const StatsCardsGoal = () => {
         {
             icon: BarChart3,
             value: `${stats.avgProgress}%`,
-            label: "Avg Progress",
+            label: "Promedio de Progreso",
             color: "text-purple-600",
             bgColor: "bg-purple-100",
             hoverColor: "hover:bg-purple-200",

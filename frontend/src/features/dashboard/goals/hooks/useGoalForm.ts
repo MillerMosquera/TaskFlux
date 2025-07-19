@@ -5,7 +5,7 @@ export function useGoalForm(goal: Goal | null) {
     const [formData, setFormData] = useState<GoalFormData>({
         title: "",
         description: "",
-        status: "not-started",
+        status: "no-iniciado",
         progress: 0,
         spaceId: "",
         ownerId: "",

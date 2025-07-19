@@ -49,7 +49,7 @@ export const GoalListItem = ({ goal, index, onGoalClick }: {
                             {isOverdue && (
                                 <Badge variant="destructive" className="text-xs">
                                     <AlertCircle className="h-3 w-3 mr-1" />
-                                    Overdue
+                                    Vencido
                                 </Badge>
                             )}
                         </div>
@@ -62,7 +62,7 @@ export const GoalListItem = ({ goal, index, onGoalClick }: {
                         <div className="flex items-center gap-4">
                             <div className="w-32">
                                 <div className="flex items-center justify-between text-sm mb-1">
-                                    <span className="text-muted-foreground">Progress</span>
+                                    <span className="text-muted-foreground">Progreso</span>
                                     <span className="font-medium">{goal.progress}%</span>
                                 </div>
                                 <Progress value={goal.progress} className="h-2" />
@@ -114,7 +114,7 @@ export const GoalListItem = ({ goal, index, onGoalClick }: {
                                             handleGoalClick(goal.id)
                                         }}
                                     >
-                                        Edit Goal
+                                        Editar Meta
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                         className="text-red-600"
@@ -123,7 +123,7 @@ export const GoalListItem = ({ goal, index, onGoalClick }: {
                                             handleDeleteGoal(goal.id)
                                         }}
                                     >
-                                        Delete Goal
+                                        Eliminar Meta
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>

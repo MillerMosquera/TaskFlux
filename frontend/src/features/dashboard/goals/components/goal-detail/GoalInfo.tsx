@@ -13,6 +13,7 @@ import { getStatusColor, getStatusLabel, isGoalOverdue } from "@/features/dashbo
 import { Goal, GoalFormData, Space, User } from "@/features/dashboard/goals/utils/types"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
+import { es } from "date-fns/locale"
 import { AlertCircle, CalendarIcon } from "lucide-react"
 
 interface GoalInfoProps {
@@ -48,22 +49,22 @@ export function GoalInfo({
         {isEditing ? (
           <>
             <div className="space-y-2">
-              <Label htmlFor="title">Goal Title *</Label>
+              <Label htmlFor="title">Título de la Meta *</Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) => onFormDataChange({ title: e.target.value })}
-                placeholder="Enter goal title..."
+                placeholder="Ingrese el título de la meta..."
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">Descripción</Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) => onFormDataChange({ description: e.target.value })}
-                placeholder="Describe your goal..."
+                placeholder="Describe tu meta..."
                 rows={3}
               />
             </div>
@@ -80,7 +81,7 @@ export function GoalInfo({
           <div className="flex items-center gap-4">
             {isEditing ? (
               <div className="space-y-2 flex-1">
-                <Label>Status</Label>
+                <Label>Estado</Label>
                 <Select
                   value={formData.status}
                   onValueChange={(value) => onFormDataChange({ status: value as any })}
@@ -89,10 +90,10 @@ export function GoalInfo({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="not-started">Not Started</SelectItem>
-                    <SelectItem value="in-progress">In Progress</SelectItem>
-                    <SelectItem value="completed">Completed</SelectItem>
-                    <SelectItem value="on-hold">On Hold</SelectItem>
+                    <SelectItem value="no-iniciado">No Iniciado</SelectItem>
+                    <SelectItem value="en-progreso">En Progreso</SelectItem>
+                    <SelectItem value="completado">Completado</SelectItem>
+                    <SelectItem value="en-espera">En Espera</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -104,7 +105,7 @@ export function GoalInfo({
                 {isOverdue && (
                   <Badge variant="destructive">
                     <AlertCircle className="h-3 w-3 mr-1" />
-                    Overdue
+                    Atrasado
                   </Badge>
                 )}
               </div>
@@ -113,7 +114,7 @@ export function GoalInfo({
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label>Progress</Label>
+              <Label>Progreso</Label>
               <span className="text-sm font-medium">{goal.progress}%</span>
             </div>
             <Progress value={goal.progress} className="h-3" />
@@ -124,7 +125,7 @@ export function GoalInfo({
       <div className="space-y-4">
         {/* Due Date */}
         <div className="space-y-2">
-          <Label>Due Date</Label>
+          <Label>Fecha Límite</Label>
           {isEditing ? (
             <Popover>
               <PopoverTrigger asChild>
@@ -136,7 +137,7 @@ export function GoalInfo({
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {dueDate ? format(dueDate, "PPP") : "Pick a date"}
+                  {dueDate ? format(dueDate, "PPP", { locale: es }) : "Seleccionar fecha"}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
@@ -148,14 +149,14 @@ export function GoalInfo({
               className={`flex items-center gap-2 text-sm ${isOverdue ? "text-red-600" : "text-muted-foreground"}`}
             >
               <CalendarIcon className="h-4 w-4" />
-              {goal.dueDate ? format(new Date(goal.dueDate), "PPP") : "No due date set"}
+              {goal.dueDate ? format(new Date(goal.dueDate), "PPP", { locale: es }) : "Sin fecha límite"}
             </div>
           )}
         </div>
 
         {/* Owner */}
         <div className="space-y-2">
-          <Label>Owner</Label>
+          <Label>Propietario</Label>
           {isEditing ? (
             <Select
               value={formData.ownerId}
@@ -196,7 +197,7 @@ export function GoalInfo({
         {/* Space */}
         {isEditing && (
           <div className="space-y-2">
-            <Label>Space</Label>
+            <Label>Espacio</Label>
             <Select
               value={formData.spaceId}
               onValueChange={(value) => onFormDataChange({ spaceId: value })}
@@ -219,11 +220,11 @@ export function GoalInfo({
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center p-3 bg-muted rounded-lg">
             <div className="text-2xl font-bold text-primary">{completedTargets}</div>
-            <div className="text-xs text-muted-foreground">Completed</div>
+            <div className="text-xs text-muted-foreground">Completado</div>
           </div>
           <div className="text-center p-3 bg-muted rounded-lg">
             <div className="text-2xl font-bold">{totalTargets}</div>
-            <div className="text-xs text-muted-foreground">Total Targets</div>
+            <div className="text-xs text-muted-foreground">Total de Objetivos</div>
           </div>
         </div>
       </div>

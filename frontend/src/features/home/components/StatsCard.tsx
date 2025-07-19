@@ -18,7 +18,7 @@ interface StatsCardsProps {
 
 const statCards = (stats: StatsCardsProps["stats"]) => [
     {
-        title: "Tasks Completed",
+        title: "Tareas Completadas",
         value: `${stats.completedTasks}/${stats.totalTasks}`,
         icon: CheckCircle,
         color: "text-green-600",
@@ -26,21 +26,21 @@ const statCards = (stats: StatsCardsProps["stats"]) => [
         progress: stats.completionRate,
     },
     {
-        title: "Due Today",
+        title: "Vencen Hoy",
         value: stats.todayTasks,
         icon: Clock,
         color: "text-blue-600",
         bgColor: "bg-blue-100 dark:bg-blue-900/20",
     },
     {
-        title: "Active Goals",
+        title: "Objetivos Activos",
         value: `${stats.activeGoals}/${stats.totalGoals}`,
         icon: Target,
         color: "text-purple-600",
         bgColor: "bg-purple-100 dark:bg-purple-900/20",
     },
     {
-        title: "Overdue",
+        title: "Atrasados",
         value: stats.overdueTasks,
         icon: AlertTriangle,
         color: "text-red-600",
@@ -56,7 +56,7 @@ export function StatsCards({ stats }: StatsCardsProps) {
             initial="hidden"
             animate="visible"
         >
-            <AnimatePresence>
+            
                 {statCards(stats).map((stat, index) => (
                     <motion.div
                         key={stat.title}
@@ -64,7 +64,7 @@ export function StatsCards({ stats }: StatsCardsProps) {
                         whileHover={{ 
                             y: -8,
                             scale: 1.03,
-                            rotateX: 5,
+                            
                             boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
                             transition: {
                                 type: "spring",
@@ -72,7 +72,6 @@ export function StatsCards({ stats }: StatsCardsProps) {
                                 damping: 10,
                             },
                         }}
-                        style={{ perspective: "1000px" }}
                     >
                         <Card className="hover:shadow-lg transition-shadow duration-200 transform-gpu">
                             <CardContent className="p-6">
@@ -132,7 +131,7 @@ export function StatsCards({ stats }: StatsCardsProps) {
                         </Card>
                     </motion.div>
                 ))}
-            </AnimatePresence>
+        
         </motion.div>
     )
 }

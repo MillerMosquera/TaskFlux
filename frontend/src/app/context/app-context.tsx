@@ -16,8 +16,8 @@ export interface User {
     email: string
     avatar?: string
     initials: string
-    role: "admin" | "member" | "viewer"
-    status: "active" | "inactive"
+    role: "administrador" | "miembro" | "espectador"
+    status: "activo" | "inactivo"
     joinedAt: string
 }
 
@@ -25,8 +25,8 @@ export interface Task {
     id: string
     title: string
     description?: string
-    status: "todo" | "in-progress" | "review" | "done"
-    priority: "low" | "medium" | "high" | "urgent"
+    status: "todo" | "en-progreso" | "revisión" | "hecho"
+    priority: "bajo" | "medio" | "alto" | "urgente"
     assigneeId?: string
     createdBy: string
     dueDate?: string
@@ -118,7 +118,7 @@ export interface Goal {
     description?: string
     progress: number
     dueDate?: string
-    status: "not-started" | "in-progress" | "completed" | "on-hold"
+    status: "no-iniciado" | "en-progreso" | "completado" | "en-espera"
     ownerId: string
     spaceId: string
     createdAt: string
@@ -135,7 +135,7 @@ export interface GoalTarget {
 
 export interface Notification {
     id: string
-    type: "task_assigned" | "task_completed" | "comment_added" | "due_date_approaching" | "mention"
+    type: "task_asignada" | "task_completado" | "comentario_agregado" | "se_acerca_fecha_limite" | "mencion"
     title: string
     message: string
     userId: string
@@ -153,7 +153,7 @@ interface AppState {
     currentUser: User
     currentSpace: string
     currentList?: string
-    currentView: "home" | "goals" | "calendar" | "team" | "dashboard" | "tasks"
+    currentView: "inicio" | "metas" | "calendario" | "equipo" | "tablero" | "tareas"
     filters: {
         assignee?: string
         priority?: string
@@ -191,8 +191,8 @@ const initialState: AppState = {
         name: "John Doe",
         email: "john@company.com",
         initials: "JD",
-        role: "admin",
-        status: "active",
+        role: "administrador",
+        status: "activo",
         joinedAt: "2024-01-01T00:00:00Z",
         skills: undefined,
         createdAt: undefined,
@@ -209,8 +209,8 @@ const initialState: AppState = {
             name: "John Doe",
             email: "john@company.com",
             initials: "JD",
-            role: "admin",
-            status: "active",
+            role: "administrador",
+            status: "activo",
             joinedAt: "2024-01-01T00:00:00Z",
             skills: undefined,
             createdAt: undefined,
@@ -226,8 +226,8 @@ const initialState: AppState = {
             name: "Alice Johnson",
             email: "alice@company.com",
             initials: "AJ",
-            role: "member",
-            status: "active",
+            role: "miembro",
+            status: "activo",
             joinedAt: "2024-01-02T00:00:00Z",
             skills: undefined,
             createdAt: undefined,
@@ -243,8 +243,8 @@ const initialState: AppState = {
             name: "Bob Smith",
             email: "bob@company.com",
             initials: "BS",
-            role: "member",
-            status: "active",
+            role: "miembro",
+            status: "activo",
             joinedAt: "2024-01-03T00:00:00Z",
             skills: undefined,
             createdAt: undefined,
@@ -260,8 +260,8 @@ const initialState: AppState = {
             name: "Carol Davis",
             email: "carol@company.com",
             initials: "CD",
-            role: "member",
-            status: "active",
+            role: "miembro",
+            status: "activo",
             joinedAt: "2024-01-04T00:00:00Z",
             skills: undefined,
             createdAt: undefined,
@@ -277,8 +277,8 @@ const initialState: AppState = {
             name: "David Wilson",
             email: "david@company.com",
             initials: "DW",
-            role: "viewer",
-            status: "active",
+            role: "espectador",
+            status: "activo",
             joinedAt: "2024-01-05T00:00:00Z",
             skills: undefined,
             createdAt: undefined,
@@ -392,7 +392,7 @@ const initialState: AppState = {
             title: "Design new landing page",
             description: "Create a modern, responsive landing page design with improved UX",
             status: "todo",
-            priority: "high",
+            priority: "alto",
             assigneeId: "user-2",
             createdBy: "user-1",
             dueDate: "2024-02-15",
@@ -425,8 +425,8 @@ const initialState: AppState = {
             id: "task-2",
             title: "Implement user authentication",
             description: "Set up JWT-based authentication system with role-based access control",
-            status: "in-progress",
-            priority: "high",
+            status: "en-progreso",
+            priority: "alto",
             assigneeId: "user-3",
             createdBy: "user-1",
             dueDate: "2024-02-20",
@@ -452,8 +452,8 @@ const initialState: AppState = {
             id: "task-3",
             title: "Write API documentation",
             description: "Document all REST API endpoints with examples and response schemas",
-            status: "review",
-            priority: "medium",
+            status: "revisión",
+            priority: "medio",
             assigneeId: "user-4",
             createdBy: "user-1",
             dueDate: "2024-02-25",
@@ -475,7 +475,7 @@ const initialState: AppState = {
             description: "Launch the new product features and reach 1000 users",
             progress: 75,
             dueDate: "2024-03-31",
-            status: "in-progress",
+            status: "en-progreso",
             ownerId: "user-1",
             spaceId: "space-1",
             createdAt: "2024-01-01T00:00:00Z",
@@ -494,7 +494,7 @@ const initialState: AppState = {
             description: "Increase team velocity by 25% through better processes",
             progress: 60,
             dueDate: "2024-04-30",
-            status: "in-progress",
+            status: "en-progreso",
             ownerId: "user-1",
             spaceId: "space-1",
             createdAt: "2024-01-01T00:00:00Z",
@@ -510,9 +510,9 @@ const initialState: AppState = {
     notifications: [
         {
             id: "notif-1",
-            type: "task_assigned",
-            title: "New Task Assigned",
-            message: "You have been assigned to 'Design new landing page'",
+            type: "task_asignada",
+            title: "Nueva Tarea Asignada",
+            message: "Has sido asignado a 'Diseñar nueva página de inicio'",
             userId: "user-2",
             read: false,
             createdAt: "2024-01-15T10:00:00Z",
@@ -520,7 +520,7 @@ const initialState: AppState = {
         },
     ],
     currentSpace: "space-1",
-    currentView: "home",
+    currentView: "inicio",
     filters: {},
 }
 

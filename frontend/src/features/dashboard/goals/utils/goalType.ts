@@ -31,7 +31,7 @@ export interface Space {
     name: string
 }
 
-// Define SortBy enum locally if not exported from goalHelper
-export type SortBy = "dueDate" | "progress" | "title" | "createdAt";
+
+export type SortBy = "fechaVencimiento" | "progreso" | "titulo" | "fechaCreacion";
 export type ViewMode = "grid" | "list" | "kanban"
-export type GoalStatus = "not-started" | "in-progress" | "completed" | "on-hold"
+export type GoalStatus = "no-iniciado" | "en-progreso" | "completado" | "en-espera"

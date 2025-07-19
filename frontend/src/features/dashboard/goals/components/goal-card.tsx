@@ -18,7 +18,7 @@ export function GoalCard({ goal, index, onGoalClick }: {
 }) {
     const { state, dispatch } = useApp()
     const owner = state.users.find((u) => u.id === goal.ownerId)
-    const isOverdue = goal.dueDate && new Date(goal.dueDate) < new Date() && goal.status !== "completed"
+    const isOverdue = goal.dueDate && new Date(goal.dueDate) < new Date() && goal.status !== "completado"
     const completedTargets = goal.targets?.filter((t: any) => t.completed).length || 0
     const totalTargets = goal.targets?.length || 0
 
@@ -46,7 +46,7 @@ export function GoalCard({ goal, index, onGoalClick }: {
                                 {isOverdue && (
                                     <Badge variant="destructive" className="text-xs whitespace-nowrap">
                                         <AlertCircle className="h-3 w-3 mr-1" />
-                                        Overdue
+                                        Vencido
                                     </Badge>
                                 )}
                             </div>
@@ -69,7 +69,7 @@ export function GoalCard({ goal, index, onGoalClick }: {
                                         handleGoalClick(goal.id)
                                     }}
                                 >
-                                    Edit Goal
+                                    Editar Meta
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     className="text-red-600"
@@ -78,7 +78,7 @@ export function GoalCard({ goal, index, onGoalClick }: {
                                         handleDeleteGoal(goal.id)
                                     }}
                                 >
-                                    Delete Goal
+                                    Eliminar Meta
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -91,7 +91,7 @@ export function GoalCard({ goal, index, onGoalClick }: {
                 <CardContent className="space-y-3 sm:space-y-4 overflow-hidden px-3 sm:px-4">
                     <div className="space-y-2">
                         <div className="flex items-center justify-between text-xs sm:text-sm">
-                            <span>Progress</span>
+                            <span>Progreso</span>
                             <span className="font-medium">{goal.progress}%</span>
                         </div>
                         <Progress value={goal.progress} className="h-2" />
@@ -101,7 +101,7 @@ export function GoalCard({ goal, index, onGoalClick }: {
                         <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                             <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
                             <span className="truncate">
-                                {completedTargets}/{totalTargets} targets completed
+                                {completedTargets}/{totalTargets} Objetivos completados
                             </span>
                         </div>
                     )}

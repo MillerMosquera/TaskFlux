@@ -25,7 +25,7 @@ export function UpcomingTasks({ tasks, users }: UpcomingTasksProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Upcoming Tasks</CardTitle>
+        <CardTitle>Próximas tareas</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
@@ -45,10 +45,10 @@ export function UpcomingTasks({ tasks, users }: UpcomingTasksProps) {
                 <div className="flex-1 min-w-0">
                   <p className="font-medium truncate">{task.title}</p>
                   <p className="text-sm text-muted-foreground">
-                    Due {new Date(task.dueDate!).toLocaleDateString()}
-                    {daysUntilDue === 0 && " (Today)"}
-                    {daysUntilDue === 1 && " (Tomorrow)"}
-                    {daysUntilDue > 1 && ` (${daysUntilDue} days)`}
+                    Vence {new Date(task.dueDate!).toLocaleDateString()}
+                    {daysUntilDue === 0 && " (Hoy)"}
+                    {daysUntilDue === 1 && " (Mañana)"}
+                    {daysUntilDue > 1 && ` (${daysUntilDue} días)`}
                   </p>
                 </div>
                 {assignee && (
@@ -64,7 +64,7 @@ export function UpcomingTasks({ tasks, users }: UpcomingTasksProps) {
             )
           })}
           {upcomingTasks.length === 0 && (
-            <p className="text-center text-muted-foreground py-4">No upcoming tasks</p>
+            <p className="text-center text-muted-foreground py-4">No hay próximas tareas</p>
           )}
         </div>
       </CardContent>
