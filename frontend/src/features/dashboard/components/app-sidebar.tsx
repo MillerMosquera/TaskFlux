@@ -1,23 +1,26 @@
 import {
-  AudioWaveform,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Home, Target, Calendar, Users
+    AudioWaveform,
+    Calendar,
+    Command,
+    Frame,
+    GalleryVerticalEnd,
+    Home,
+    Map,
+    PieChart,
+    Target,
+    Users
 } from "lucide-react"
 import * as React from "react"
 
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarRail,
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarRail,
 } from "@/components/ui/sidebar.tsx"
 import { NavMain } from "@/features/dashboard/components/nav-main.tsx"
-import { NavProjects } from "@/features/dashboard/components/nav-projects.tsx"
+import { NavSpaces } from "@/features/dashboard/components/nav-spaces.tsx"
 import { NavUser } from "@/features/dashboard/components/nav-user.tsx"
 import { TeamSwitcher } from "@/features/dashboard/components/team-switcher.tsx"
 
@@ -95,7 +98,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavSpaces />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

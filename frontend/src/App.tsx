@@ -3,11 +3,12 @@ import MainLayout from "@/app/layout/MainLayout.tsx";
 import { Route, Routes, useLocation } from 'react-router-dom';
 
 import Dashboard from "@/app/layout/Dashboard.tsx";
+import { CalendarioView } from "@/features/dashboard/views/CalendarioView";
 import DashboardGoal from "@/features/dashboard/views/DashboardGoalView";
 import { DashboardHome } from "@/features/dashboard/views/DashboardHomeView";
-import { CalendarioView } from "@/features/dashboard/views/CalendarioView";
-import { PlaygroundView } from "@/features/dashboard/views/HomeView";
 import { EquipoView } from "@/features/dashboard/views/EquipoView";
+import { PlaygroundView } from "@/features/dashboard/views/HomeView";
+import ProjectView from "@/features/dashboard/views/ProjectView";
 import './App.css';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
                     <Route path="metas" element={<DashboardGoal/>} />
                     <Route path="calendario" element={<CalendarioView/>} />
                     <Route path="equipo" element={<EquipoView/>} />
+                    <Route path="project/:projectId" element={<ProjectView/>} />
                 </Route>
             </Routes>
         );

@@ -1,6 +1,6 @@
-import { useMemo } from "react"
-import { isToday, isThisWeek, addDays } from "date-fns"
 import { useApp } from "@/app/context/app-context"
+import { addDays, isThisWeek, isToday } from "date-fns"
+import { useMemo } from "react"
 
 export function useHomeStats() {
   const { state } = useApp()
@@ -21,8 +21,8 @@ export function useHomeStats() {
     const thisWeekTasks = myTasks.filter((t) => t.dueDate && isThisWeek(new Date(t.dueDate)) && !t.completed)
 
     const myGoals = spaceGoals.filter((g) => g.ownerId === state.currentUser.id)
-    const completedGoals = myGoals.filter((g) => g.status === "completed")
-    const activeGoals = myGoals.filter((g) => g.status === "in-progress")
+    const completedGoals = myGoals.filter((g) => g.status === "completado")
+    const activeGoals = myGoals.filter((g) => g.status === "en-progreso")
 
     return {
       currentSpace,
@@ -39,7 +39,7 @@ export function useHomeStats() {
         })
         .slice(0, 5),
       recentGoals: myGoals
-        .filter((g) => g.status !== "completed")
+        .filter((g) => g.status !== "completado")
         .sort((a, b) => new Date(a.dueDate || 0).getTime() - new Date(b.dueDate || 0).getTime())
         .slice(0, 3),
       upcomingDeadlines: [...spaceTasks, ...spaceGoals]
@@ -54,7 +54,7 @@ export function useHomeStats() {
               // If it's a task (has 'completed'), check not completed
               ("completed" in item && !item.completed) ||
               // If it's a goal (has 'status'), check not completed
-              ("status" in item && item.status !== "completed")
+              ("status" in item && item.status !== "completado")
             )
           )
         })

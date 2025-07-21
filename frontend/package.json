@@ -4,10 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "dev": "vite --host",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext ts,tsx --fix",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "clean:deps": "rm -rf node_modules package-lock.json",
+    "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,json,css,md}\"",
+    "test": "echo \"No tests specified\" && exit 0",
+    "analyze": "npx vite-bundle-analyzer",
+    "start": "npm run dev"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.10",
