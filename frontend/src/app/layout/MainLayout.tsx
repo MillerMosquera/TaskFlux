@@ -1,8 +1,8 @@
-import {motion} from 'framer-motion'
-import {Badge} from "@/components/ui/badge";
-import {Button} from "@/components/ui/button";
-import {ArrowUpRight} from "lucide-react";
-import "../../App.css"
+import "@/App.css";
+import { Badge } from "@/shared/ui/badge";
+import { Button } from "@/shared/ui/button";
+import { motion } from 'framer-motion';
+import { ArrowUpRight } from "lucide-react";
 
 export default function MainLayout() {
     return (

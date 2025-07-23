@@ -1,5 +1,5 @@
-import { ModeToggle } from "@/components/mode-toggle";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
+import { ModeToggle } from "@/shared/ui/mode-toggle";
 import { Link } from "react-router-dom";
 
 const navLinks = [

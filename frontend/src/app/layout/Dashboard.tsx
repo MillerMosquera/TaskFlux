@@ -1,13 +1,13 @@
-import { AppSidebar } from "@/features/dashboard/components/app-sidebar.tsx"
+import { AppSidebar } from "@/app/layout/components/app-sidebar.tsx"
 
 import { AppProvider } from "@/app/context/app-context.tsx"
+import { Header } from "@/app/layout/components/header/main-header.tsx"
+import { SpacesProvider } from "@/app/workspace-management/interface-adapters/spaces-context.tsx"
 import {
     SidebarInset,
     SidebarProvider,
     SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { Header } from "@/features/dashboard/components/header/main-header.tsx"
-import { SpacesProvider } from "@/features/dashboard/context/spaces-context.tsx"
+} from "@/shared/ui/sidebar"
 import { Outlet } from "react-router-dom"
 
 export default function Dashboard() {

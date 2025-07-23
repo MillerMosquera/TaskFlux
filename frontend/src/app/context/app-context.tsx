@@ -1,389 +1,245 @@
+import React, { createContext, ReactNode, useContext, useReducer } from "react"
 
-import type React from "react"
-import { createContext, useContext, useReducer, type ReactNode } from "react"
+// Importar tipos de base de datos (sin UI)
+import type {
+    CommentMention,
+    CreateNotification,
+    CreateSubtask,
+    CreateTag,
+    CreateTask,
+    CreateTaskAttachment,
+    CreateTaskComment,
+    CreateTaskTag,
+    CreateTimeEntry,
+    Notification,
+    NotificationReference,
+    Subtask,
+    Tag,
+    Task,
+    TaskAttachment,
+    TaskComment,
+    TaskSchedule,
+    TaskTag,
+    TimeEntry,
+    UpdateSubtask,
+    UpdateTag,
+    UpdateTask,
+    UpdateTaskComment,
+    UpdateTaskSchedule,
+    User,
+    UserProfile,
+    UserRoleEntity,
+    UserSettings,
+    UserSkill,
+} from "@/shared/types/database"
 
-export interface User {
-    timezone: string;
-    department: string;
-    jobTitle: string;
-    bio: string;
-    location: string;
-    phone: string;
-    createdAt: any;
-    skills: any;
-    id: string
-    name: string
-    email: string
-    avatar?: string
-    initials: string
-    role: "administrador" | "miembro" | "espectador"
-    status: "activo" | "inactivo"
-    joinedAt: string
-}
+// Importar tipos de UI
+import type {
+    AppFilters,
+    ColorVariant,
+    CurrentView,
+    UIFolder,
+    UIGoal,
+    UIList,
+    UISpace
+} from "@/shared/types/ui"
 
-export interface Task {
-    id: string
-    title: string
-    description?: string
-    status: "todo" | "en-progreso" | "revisión" | "hecho"
-    priority: "bajo" | "medio" | "alto" | "urgente"
-    assigneeId?: string
-    createdBy: string
-    dueDate?: string
-    startDate?: string
-    estimatedTime?: number
-    actualTime?: number
-    tags: string[]
-    comments: Comment[]
-    attachments: Attachment[]
-    subtasks: Subtask[]
-    listId: string
-    completed: boolean
-    createdAt: string
-    updatedAt: string
-    timeTracking?: TimeEntry[]
-}
+// =================================================================
+// ESTADO DE LA APLICACIÓN REFACTORIZADO
+// =================================================================
 
-export interface Comment {
-    id: string
-    text: string
-    authorId: string
-    createdAt: string
-    updatedAt?: string
-    mentions?: string[]
-}
-
-export interface Attachment {
-    id: string
-    name: string
-    url: string
-    type: string
-    size: number
-    uploadedBy: string
-    uploadedAt: string
-}
-
-export interface Subtask {
-    id: string
-    title: string
-    completed: boolean
-    assigneeId?: string
-    createdAt: string
-}
-
-export interface TimeEntry {
-    id: string
-    startTime: string
-    endTime?: string
-    duration?: number
-    description?: string
-    userId: string
-}
-
-export interface List {
-    id: string
-    name: string
-    color?: string
-    folderId: string
-    taskCount: number
-    createdAt: string
-    position: number
-}
-
-export interface Folder {
-    id: string
-    name: string
-    spaceId: string
-    lists: List[]
-    createdAt: string
-    position: number
-}
-
-export interface Space {
-    id: string
-    name: string
-    description?: string
-    color: string
-    members: string[]
-    folders: Folder[]
-    createdAt: string
-    createdBy: string
-}
-
-export interface Goal {
-    completed: boolean;
-    assigneeId: string;
-    id: string
-    title: string
-    description?: string
-    progress: number
-    dueDate?: string
-    status: "no-iniciado" | "en-progreso" | "completado" | "en-espera"
-    ownerId: string
-    spaceId: string
-    createdAt: string
-    updatedAt: string
-    targets: GoalTarget[]
-}
-
-export interface GoalTarget {
-    id: string
-    title: string
-    completed: boolean
-    dueDate?: string
-}
-
-export interface Notification {
-    id: string
-    type: "task_asignada" | "task_completado" | "comentario_agregado" | "se_acerca_fecha_limite" | "mencion"
-    title: string
-    message: string
-    userId: string
-    read: boolean
-    createdAt: string
-    relatedId?: string
-}
-
-interface AppState {
+interface AppDataState {
+    // Entidades de usuario
     users: User[]
-    spaces: Space[]
+    userProfiles: UserProfile[]
+    userRoles: UserRoleEntity[]
+    userSettings: UserSettings[]
+    userSkills: UserSkill[]
+    
+    // Entidades de tareas
     tasks: Task[]
-    goals: Goal[]
+    taskSchedules: TaskSchedule[]
+    tags: Tag[]
+    taskTags: TaskTag[]
+    taskComments: TaskComment[]
+    commentMentions: CommentMention[]
+    taskAttachments: TaskAttachment[]
+    subtasks: Subtask[]
+    timeEntries: TimeEntry[]
+    
+    // Entidades de notificaciones
     notifications: Notification[]
-    currentUser: User
+    notificationReferences: NotificationReference[]
+    
+    // Entidades de espacios y metas (con propiedades de UI)
+    spaces: UISpace[]
+    goals: UIGoal[]
+    
+    // Estado de navegación
+    currentUserId: string
     currentSpace: string
-    currentList?: string
-    currentView: "inicio" | "metas" | "calendario" | "equipo" | "tablero" | "tareas"
-    filters: {
-        assignee?: string
-        priority?: string
-        status?: string
-        search?: string
-    }
+    currentView: CurrentView
+    filters: AppFilters
 }
 
-type AppAction =
-    | { type: "ADD_TASK"; payload: Omit<Task, "id" | "createdAt" | "updatedAt"> }
-    | { type: "UPDATE_TASK"; payload: { id: string; updates: Partial<Task> } }
-    | { type: "DELETE_TASK"; payload: string }
-    | { type: "ADD_SPACE"; payload: Omit<Space, "id" | "createdAt"> }
-    | { type: "UPDATE_SPACE"; payload: { id: string; updates: Partial<Space> } }
-    | { type: "DELETE_SPACE"; payload: string }
-    | { type: "ADD_FOLDER"; payload: Omit<Folder, "id" | "createdAt" | "position"> }
-    | { type: "ADD_LIST"; payload: Omit<List, "id" | "createdAt" | "taskCount" | "position"> }
-    | { type: "ADD_GOAL"; payload: Omit<Goal, "id" | "createdAt" | "updatedAt"> }
-    | { type: "UPDATE_GOAL"; payload: { id: string; updates: Partial<Goal> } }
-    | { type: "DELETE_GOAL"; payload: string }
-    | { type: "ADD_USER"; payload: Omit<User, "id"> }
-    | { type: "SET_CURRENT_SPACE"; payload: string }
-    | { type: "SET_CURRENT_LIST"; payload: string }
-    | { type: "SET_CURRENT_VIEW"; payload: AppState["currentView"] }
-    | { type: "SET_FILTERS"; payload: Partial<AppState["filters"]> }
-    | { type: "ADD_COMMENT"; payload: { taskId: string; comment: Omit<Comment, "id" | "createdAt"> } }
-    | { type: "ADD_NOTIFICATION"; payload: Omit<Notification, "id" | "createdAt"> }
-    | { type: "MARK_NOTIFICATION_READ"; payload: string }
-    | { type: "REORDER_TASKS"; payload: { sourceStatus: string; destinationStatus: string; taskId: string } }
+// =================================================================
+// ACCIONES DE LA APLICACIÓN REFACTORIZADAS
+// =================================================================
 
-// @ts-ignore
-const initialState: AppState = {
-    currentUser: {
-        id: "user-1",
-        name: "John Doe",
-        email: "john@company.com",
-        initials: "JD",
-        role: "administrador",
-        status: "activo",
-        joinedAt: "2024-01-01T00:00:00Z",
-        skills: undefined,
-        createdAt: undefined,
-        timezone: "",
-        department: "",
-        jobTitle: "",
-        bio: "",
-        location: "",
-        phone: ""
-    },
+type AppDataAction =
+    // Acciones de usuario
+    | { type: "UPDATE_USER"; payload: { id: string; updates: Partial<User> } }
+    | { type: "UPDATE_USER_PROFILE"; payload: { userId: string; updates: Partial<UserProfile> } }
+    | { type: "ADD_USER_SKILL"; payload: Omit<UserSkill, "id" | "addedAt"> }
+    | { type: "REMOVE_USER_SKILL"; payload: string }
+    | { type: "UPDATE_USER_ROLE"; payload: { userId: string; spaceId: string; role: UserRoleEntity["role"] } }
+    | { type: "UPDATE_USER_SETTINGS"; payload: { userId: string; updates: Partial<UserSettings> } }
+    
+    // Acciones de tareas
+    | { type: "ADD_TASK"; payload: CreateTask }
+    | { type: "UPDATE_TASK"; payload: { id: string; updates: UpdateTask } }
+    | { type: "DELETE_TASK"; payload: string }
+    | { type: "UPDATE_TASK_SCHEDULE"; payload: { taskId: string; updates: UpdateTaskSchedule } }
+    | { type: "ADD_TASK_TAG"; payload: CreateTaskTag }
+    | { type: "REMOVE_TASK_TAG"; payload: { taskId: string; tagId: string } }
+    | { type: "ADD_TASK_COMMENT"; payload: CreateTaskComment }
+    | { type: "UPDATE_TASK_COMMENT"; payload: { id: string; updates: UpdateTaskComment } }
+    | { type: "DELETE_TASK_COMMENT"; payload: string }
+    | { type: "ADD_TASK_ATTACHMENT"; payload: CreateTaskAttachment }
+    | { type: "REMOVE_TASK_ATTACHMENT"; payload: string }
+    | { type: "ADD_SUBTASK"; payload: CreateSubtask }
+    | { type: "UPDATE_SUBTASK"; payload: { id: string; updates: UpdateSubtask } }
+    | { type: "DELETE_SUBTASK"; payload: string }
+    | { type: "ADD_TIME_ENTRY"; payload: CreateTimeEntry }
+    
+    // Acciones de etiquetas
+    | { type: "CREATE_TAG"; payload: CreateTag }
+    | { type: "UPDATE_TAG"; payload: { id: string; updates: UpdateTag } }
+    | { type: "DELETE_TAG"; payload: string }
+    
+    // Acciones de espacios
+    | { type: "ADD_SPACE"; payload: Omit<UISpace, "id" | "createdAt"> }
+    | { type: "UPDATE_SPACE"; payload: { id: string; updates: Partial<UISpace> } }
+    | { type: "DELETE_SPACE"; payload: string }
+    
+    // Acciones de carpetas y listas  
+    | { type: "ADD_FOLDER"; payload: Omit<UIFolder, "id" | "createdAt" | "position"> }
+    | { type: "ADD_LIST"; payload: Omit<UIList, "id" | "createdAt" | "taskCount" | "position"> }
+    
+    // Acciones de metas
+    | { type: "ADD_GOAL"; payload: Omit<UIGoal, "id" | "createdAt" | "updatedAt"> }
+    | { type: "UPDATE_GOAL"; payload: { id: string; updates: Partial<UIGoal> } }
+    | { type: "DELETE_GOAL"; payload: string }
+    
+    // Acciones de notificaciones
+    | { type: "ADD_NOTIFICATION"; payload: CreateNotification }
+    | { type: "MARK_NOTIFICATION_READ"; payload: string }
+    
+    // Acciones de navegación
+    | { type: "SET_CURRENT_SPACE"; payload: string }
+    | { type: "SET_CURRENT_VIEW"; payload: CurrentView }
+    | { type: "SET_FILTERS"; payload: Partial<AppFilters> }
+    | { type: "REORDER_TASKS"; payload: { sourceStatus: string; destinationStatus: string; taskId: string } }
+    
+    // Acciones generales
+    | { type: "ADD_USER"; payload: Omit<User, "id"> }
+
+// =================================================================
+// ESTADO INICIAL CON DATOS DE MUESTRA
+// =================================================================
+
+const initialState: AppDataState = {
     users: [
         {
             id: "user-1",
             name: "John Doe",
             email: "john@company.com",
             initials: "JD",
-            role: "administrador",
             status: "activo",
-            joinedAt: "2024-01-01T00:00:00Z",
-            skills: undefined,
-            createdAt: undefined,
-            timezone: "",
-            department: "",
-            jobTitle: "",
-            bio: "",
-            location: "",
-            phone: ""
+            createdAt: "2024-01-01T00:00:00Z",
+            updatedAt: "2024-01-01T00:00:00Z",
         },
         {
             id: "user-2",
             name: "Alice Johnson",
             email: "alice@company.com",
             initials: "AJ",
-            role: "miembro",
             status: "activo",
-            joinedAt: "2024-01-02T00:00:00Z",
-            skills: undefined,
-            createdAt: undefined,
-            timezone: "",
-            department: "",
-            jobTitle: "",
-            bio: "",
-            location: "",
-            phone: ""
+            createdAt: "2024-01-02T00:00:00Z",
+            updatedAt: "2024-01-02T00:00:00Z",
         },
         {
             id: "user-3",
             name: "Bob Smith",
             email: "bob@company.com",
             initials: "BS",
-            role: "miembro",
             status: "activo",
-            joinedAt: "2024-01-03T00:00:00Z",
-            skills: undefined,
-            createdAt: undefined,
-            timezone: "",
-            department: "",
-            jobTitle: "",
-            bio: "",
-            location: "",
-            phone: ""
-        },
-        {
-            id: "user-4",
-            name: "Carol Davis",
-            email: "carol@company.com",
-            initials: "CD",
-            role: "miembro",
-            status: "activo",
-            joinedAt: "2024-01-04T00:00:00Z",
-            skills: undefined,
-            createdAt: undefined,
-            timezone: "",
-            department: "",
-            jobTitle: "",
-            bio: "",
-            location: "",
-            phone: ""
-        },
-        {
-            id: "user-5",
-            name: "David Wilson",
-            email: "david@company.com",
-            initials: "DW",
-            role: "espectador",
-            status: "activo",
-            joinedAt: "2024-01-05T00:00:00Z",
-            skills: undefined,
-            createdAt: undefined,
-            timezone: "",
-            department: "",
-            jobTitle: "",
-            bio: "",
-            location: "",
-            phone: ""
+            createdAt: "2024-01-03T00:00:00Z",
+            updatedAt: "2024-01-03T00:00:00Z",
         },
     ],
-    spaces: [
+    userProfiles: [
         {
-            id: "space-1",
-            name: "Work Space",
-            description: "Main workspace for company projects",
-            color: "bg-blue-500",
-            members: ["user-1", "user-2", "user-3", "user-4", "user-5"],
-            createdAt: "2024-01-01T00:00:00Z",
-            createdBy: "user-1",
-            folders: [
-                {
-                    id: "folder-1",
-                    name: "Marketing",
-                    spaceId: "space-1",
-                    createdAt: "2024-01-01T00:00:00Z",
-                    position: 0,
-                    lists: [
-                        {
-                            id: "list-1",
-                            name: "Campaigns",
-                            folderId: "folder-1",
-                            taskCount: 0,
-                            createdAt: "2024-01-01T00:00:00Z",
-                            position: 0,
-                            color: "bg-red-500",
-                        },
-                        {
-                            id: "list-2",
-                            name: "Content",
-                            folderId: "folder-1",
-                            taskCount: 0,
-                            createdAt: "2024-01-01T00:00:00Z",
-                            position: 1,
-                            color: "bg-green-500",
-                        },
-                    ],
-                },
-                {
-                    id: "folder-2",
-                    name: "Development",
-                    spaceId: "space-1",
-                    createdAt: "2024-01-01T00:00:00Z",
-                    position: 1,
-                    lists: [
-                        {
-                            id: "list-3",
-                            name: "Frontend",
-                            folderId: "folder-2",
-                            taskCount: 0,
-                            createdAt: "2024-01-01T00:00:00Z",
-                            position: 0,
-                            color: "bg-purple-500",
-                        },
-                        {
-                            id: "list-4",
-                            name: "Backend",
-                            folderId: "folder-2",
-                            taskCount: 0,
-                            createdAt: "2024-01-01T00:00:00Z",
-                            position: 1,
-                            color: "bg-yellow-500",
-                        },
-                    ],
-                },
-            ],
+            id: "profile-1",
+            userId: "user-1",
+            bio: "Administrador del sistema con experiencia en gestión de proyectos",
+            timezone: "America/New_York",
+            location: "New York, USA",
+            phone: "+1-555-0123",
+            department: "Technology",
+            jobTitle: "Project Manager",
+            joinedAt: "2024-01-01T00:00:00Z",
+            updatedAt: "2024-01-01T00:00:00Z",
+        },
+    ],
+    userRoles: [
+        {
+            id: "role-1",
+            userId: "user-1",
+            spaceId: "space-1",
+            role: "administrador",
+            assignedAt: "2024-01-01T00:00:00Z",
+            assignedBy: "user-1",
         },
         {
-            id: "space-2",
-            name: "Personal",
-            description: "Personal projects and goals",
-            color: "bg-green-500",
-            members: ["user-1"],
-            createdAt: "2024-01-01T00:00:00Z",
-            createdBy: "user-1",
-            folders: [
-                {
-                    id: "folder-3",
-                    name: "Goals",
-                    spaceId: "space-2",
-                    createdAt: "2024-01-01T00:00:00Z",
-                    position: 0,
-                    lists: [
-                        {
-                            id: "list-5",
-                            name: "Fitness",
-                            folderId: "folder-3",
-                            taskCount: 0,
-                            createdAt: "2024-01-01T00:00:00Z",
-                            position: 0,
-                            color: "bg-orange-500",
-                        },
-                    ],
-                },
-            ],
+            id: "role-2",
+            userId: "user-2",
+            spaceId: "space-1",
+            role: "miembro",
+            assignedAt: "2024-01-02T00:00:00Z",
+            assignedBy: "user-1",
+        },
+        {
+            id: "role-3",
+            userId: "user-3",
+            spaceId: "space-1",
+            role: "espectador",
+            assignedAt: "2024-01-03T00:00:00Z",
+            assignedBy: "user-1",
+        },
+    ],
+    userSettings: [
+        {
+            id: "settings-1",
+            userId: "user-1",
+            theme: "system",
+            language: "es",
+            emailNotifications: true,
+            pushNotifications: true,
+            weekStartsOn: 1,
+            dateFormat: "dd/MM/yyyy",
+            timeFormat: "24h",
+            updatedAt: "2024-01-01T00:00:00Z",
+        },
+    ],
+    userSkills: [
+        {
+            id: "skill-1",
+            userId: "user-1",
+            skillName: "Project Management",
+            level: "expert",
+            verified: true,
+            addedAt: "2024-01-01T00:00:00Z",
         },
     ],
     tasks: [
@@ -395,77 +251,62 @@ const initialState: AppState = {
             priority: "alto",
             assigneeId: "user-2",
             createdBy: "user-1",
-            dueDate: "2024-02-15",
-            estimatedTime: 16,
-            tags: ["Design", "Frontend", "UX"],
-            comments: [],
-            attachments: [],
-            subtasks: [
-                {
-                    id: "subtask-1",
-                    title: "Create wireframes",
-                    completed: true,
-                    assigneeId: "user-2",
-                    createdAt: "2024-01-01T00:00:00Z",
-                },
-                {
-                    id: "subtask-2",
-                    title: "Design mockups",
-                    completed: false,
-                    assigneeId: "user-2",
-                    createdAt: "2024-01-01T00:00:00Z",
-                },
-            ],
             listId: "list-1",
             completed: false,
             createdAt: "2024-01-01T00:00:00Z",
             updatedAt: "2024-01-01T00:00:00Z",
         },
+    ],
+    taskSchedules: [],
+    tags: [
         {
-            id: "task-2",
-            title: "Implement user authentication",
-            description: "Set up JWT-based authentication system with role-based access control",
-            status: "en-progreso",
-            priority: "alto",
-            assigneeId: "user-3",
+            id: "tag-1",
+            name: "Design",
+            color: "#3B82F6",
+            spaceId: "space-1",
+            createdAt: "2024-01-01T00:00:00Z",
+            usageCount: 1,
+        },
+    ],
+    taskTags: [],
+    taskComments: [],
+    commentMentions: [],
+    taskAttachments: [],
+    subtasks: [],
+    timeEntries: [],
+    notifications: [],
+    notificationReferences: [],
+    spaces: [
+        {
+            id: "space-1",
+            name: "Work Space",
+            description: "Main workspace for company projects",
+            color: "bg-blue-500" as ColorVariant,
+            members: ["user-1", "user-2", "user-3"],
+            createdAt: "2024-01-01T00:00:00Z",
             createdBy: "user-1",
-            dueDate: "2024-02-20",
-            estimatedTime: 24,
-            actualTime: 8,
-            tags: ["Backend", "Security", "Authentication"],
-            comments: [
+            updatedAt: "2024-01-01T00:00:00Z",
+            folders: [
                 {
-                    id: "comment-1",
-                    text: "Started working on the JWT implementation",
-                    authorId: "user-3",
-                    createdAt: "2024-01-02T10:00:00Z",
+                    id: "folder-1",
+                    name: "Development",
+                    spaceId: "space-1",
+                    createdAt: "2024-01-01T00:00:00Z",
+                    position: 0,
+                    lists: [
+                        {
+                            id: "list-1",
+                            name: "Frontend",
+                            folderId: "folder-1",
+                            taskCount: 1,
+                            createdAt: "2024-01-01T00:00:00Z",
+                            updatedAt: "2024-01-01T00:00:00Z",
+                            position: 0,
+                            color: "bg-purple-500" as ColorVariant,
+                        },
+                    ],
                 },
             ],
-            attachments: [],
-            subtasks: [],
-            listId: "list-4",
-            completed: false,
-            createdAt: "2024-01-01T00:00:00Z",
-            updatedAt: "2024-01-02T10:00:00Z",
-        },
-        {
-            id: "task-3",
-            title: "Write API documentation",
-            description: "Document all REST API endpoints with examples and response schemas",
-            status: "revisión",
-            priority: "medio",
-            assigneeId: "user-4",
-            createdBy: "user-1",
-            dueDate: "2024-02-25",
-            estimatedTime: 12,
-            tags: ["Documentation", "API"],
-            comments: [],
-            attachments: [],
-            subtasks: [],
-            listId: "list-4",
-            completed: false,
-            createdAt: "2024-01-01T00:00:00Z",
-            updatedAt: "2024-01-01T00:00:00Z",
         },
     ],
     goals: [
@@ -481,281 +322,143 @@ const initialState: AppState = {
             createdAt: "2024-01-01T00:00:00Z",
             updatedAt: "2024-01-15T00:00:00Z",
             targets: [
-                {id: "target-1", title: "Complete MVP", completed: true, dueDate: "2024-02-15"},
-                {id: "target-2", title: "Beta testing", completed: false, dueDate: "2024-03-01"},
-                {id: "target-3", title: "Launch marketing campaign", completed: false, dueDate: "2024-03-15"},
+                { id: "target-1", title: "Complete MVP", completed: true, dueDate: "2024-02-15" },
+                { id: "target-2", title: "Beta testing", completed: false, dueDate: "2024-03-01" },
             ],
             completed: false,
-            assigneeId: ""
-        },
-        {
-            id: "goal-2",
-            title: "Improve Team Productivity",
-            description: "Increase team velocity by 25% through better processes",
-            progress: 60,
-            dueDate: "2024-04-30",
-            status: "en-progreso",
-            ownerId: "user-1",
-            spaceId: "space-1",
-            createdAt: "2024-01-01T00:00:00Z",
-            updatedAt: "2024-01-15T00:00:00Z",
-            targets: [
-                {id: "target-4", title: "Implement new tools", completed: true, dueDate: "2024-02-01"},
-                {id: "target-5", title: "Team training", completed: false, dueDate: "2024-03-01"},
-            ],
-            completed: false,
-            assigneeId: ""
+            assigneeId: "user-1",
         },
     ],
-    notifications: [
-        {
-            id: "notif-1",
-            type: "task_asignada",
-            title: "Nueva Tarea Asignada",
-            message: "Has sido asignado a 'Diseñar nueva página de inicio'",
-            userId: "user-2",
-            read: false,
-            createdAt: "2024-01-15T10:00:00Z",
-            relatedId: "task-1",
-        },
-    ],
+    currentUserId: "user-1",
     currentSpace: "space-1",
     currentView: "inicio",
     filters: {},
 }
 
-function appReducer(state: AppState, action: AppAction): AppState {
+// =================================================================
+// REDUCER DE LA APLICACIÓN REFACTORIZADO
+// =================================================================
+
+function appReducer(state: AppDataState, action: AppDataAction): AppDataState {
     switch (action.type) {
-        case "ADD_TASK": {
+        // Acciones de navegación
+        case "SET_CURRENT_SPACE":
+            return { ...state, currentSpace: action.payload }
+            
+        case "SET_CURRENT_VIEW":
+            return { ...state, currentView: action.payload }
+            
+        case "SET_FILTERS":
+            return { ...state, filters: { ...state.filters, ...action.payload } }
+            
+        // Acciones de tareas
+        case "ADD_TASK":
             const newTask: Task = {
                 ...action.payload,
                 id: `task-${Date.now()}`,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
             }
+            return { ...state, tasks: [...state.tasks, newTask] }
+            
+        case "UPDATE_TASK":
             return {
                 ...state,
-                tasks: [...state.tasks, newTask],
-            }
-        }
-
-        case "UPDATE_TASK": {
-            return {
-                ...state,
-                tasks: state.tasks.map((task) =>
+                tasks: state.tasks.map(task =>
                     task.id === action.payload.id
                         ? { ...task, ...action.payload.updates, updatedAt: new Date().toISOString() }
-                        : task,
-                ),
+                        : task
+                )
             }
-        }
-
-        case "DELETE_TASK": {
+            
+        case "DELETE_TASK":
             return {
                 ...state,
-                tasks: state.tasks.filter((task) => task.id !== action.payload),
+                tasks: state.tasks.filter(task => task.id !== action.payload)
             }
-        }
-
-        case "ADD_SPACE": {
-            const newSpace: Space = {
+            
+        // Acciones de espacios
+        case "ADD_SPACE":
+            const newSpace: UISpace = {
                 ...action.payload,
                 id: `space-${Date.now()}`,
                 createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
             }
+            return { ...state, spaces: [...state.spaces, newSpace] }
+            
+        case "UPDATE_SPACE":
             return {
                 ...state,
-                spaces: [...state.spaces, newSpace],
+                spaces: state.spaces.map(space =>
+                    space.id === action.payload.id
+                        ? { ...space, ...action.payload.updates, updatedAt: new Date().toISOString() }
+                        : space
+                )
             }
-        }
-
-        case "UPDATE_SPACE": {
-            return {
-                ...state,
-                spaces: state.spaces.map((space) =>
-                    space.id === action.payload.id ? { ...space, ...action.payload.updates } : space,
-                ),
-            }
-        }
-
-        case "DELETE_SPACE": {
-            return {
-                ...state,
-                spaces: state.spaces.filter((space) => space.id !== action.payload),
-                currentSpace: state.currentSpace === action.payload ? state.spaces[0]?.id || "" : state.currentSpace,
-            }
-        }
-
-        case "ADD_FOLDER": {
-            const newFolder: Folder = {
-                ...action.payload,
-                id: `folder-${Date.now()}`,
-                createdAt: new Date().toISOString(),
-                position: 0,
-            }
-            return {
-                ...state,
-                spaces: state.spaces.map((space) =>
-                    space.id === action.payload.spaceId ? { ...space, folders: [...space.folders, newFolder] } : space,
-                ),
-            }
-        }
-
-        case "ADD_LIST": {
-            const newList: List = {
-                ...action.payload,
-                id: `list-${Date.now()}`,
-                taskCount: 0,
-                createdAt: new Date().toISOString(),
-                position: 0,
-            }
-            return {
-                ...state,
-                spaces: state.spaces.map((space) => ({
-                    ...space,
-                    folders: space.folders.map((folder) =>
-                        folder.id === action.payload.folderId ? { ...folder, lists: [...folder.lists, newList] } : folder,
-                    ),
-                })),
-            }
-        }
-
-        case "ADD_GOAL": {
-            const newGoal: Goal = {
+            
+        // Acciones de metas
+        case "ADD_GOAL":
+            const newGoal: UIGoal = {
                 ...action.payload,
                 id: `goal-${Date.now()}`,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
             }
+            return { ...state, goals: [...state.goals, newGoal] }
+            
+        case "UPDATE_GOAL":
             return {
                 ...state,
-                goals: [...state.goals, newGoal],
-            }
-        }
-
-        case "UPDATE_GOAL": {
-            return {
-                ...state,
-                goals: state.goals.map((goal) =>
+                goals: state.goals.map(goal =>
                     goal.id === action.payload.id
                         ? { ...goal, ...action.payload.updates, updatedAt: new Date().toISOString() }
-                        : goal,
-                ),
+                        : goal
+                )
             }
-        }
-
-        case "DELETE_GOAL": {
-            return {
-                ...state,
-                goals: state.goals.filter((goal) => goal.id !== action.payload),
+            
+        // Acciones de etiquetas
+        case "CREATE_TAG":
+            const newTag: Tag = {
+                ...action.payload,
+                id: `tag-${Date.now()}`,
+                createdAt: new Date().toISOString(),
+                usageCount: 0,
             }
-        }
-
-        case "ADD_USER": {
+            return { ...state, tags: [...state.tags, newTag] }
+            
+        // Acciones de usuarios
+        case "ADD_USER":
             const newUser: User = {
                 ...action.payload,
                 id: `user-${Date.now()}`,
-            }
-            return {
-                ...state,
-                users: [...state.users, newUser],
-            }
-        }
-
-        case "SET_CURRENT_SPACE": {
-            return {
-                ...state,
-                currentSpace: action.payload,
-            }
-        }
-
-        case "SET_CURRENT_LIST": {
-            return {
-                ...state,
-                currentList: action.payload,
-            }
-        }
-
-        case "SET_CURRENT_VIEW": {
-            return {
-                ...state,
-                currentView: action.payload,
-            }
-        }
-
-        case "SET_FILTERS": {
-            return {
-                ...state,
-                filters: { ...state.filters, ...action.payload },
-            }
-        }
-
-        case "ADD_COMMENT": {
-            const newComment: Comment = {
-                ...action.payload.comment,
-                id: `comment-${Date.now()}`,
                 createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
             }
-            return {
-                ...state,
-                tasks: state.tasks.map((task) =>
-                    task.id === action.payload.taskId ? { ...task, comments: [...task.comments, newComment] } : task,
-                ),
-            }
-        }
-
-        case "ADD_NOTIFICATION": {
-            const newNotification: Notification = {
-                ...action.payload,
-                id: `notif-${Date.now()}`,
-                createdAt: new Date().toISOString(),
-            }
-            return {
-                ...state,
-                notifications: [...state.notifications, newNotification],
-            }
-        }
-
-        case "MARK_NOTIFICATION_READ": {
-            return {
-                ...state,
-                notifications: state.notifications.map((notif) =>
-                    notif.id === action.payload ? { ...notif, read: true } : notif,
-                ),
-            }
-        }
-
-        case "REORDER_TASKS": {
-            const {destinationStatus, taskId } = action.payload
-            return {
-                ...state,
-                tasks: state.tasks.map((task) =>
-                    task.id === taskId
-                        ? {
-                            ...task,
-                            status: destinationStatus as Task["status"],
-                            completed: destinationStatus === "done",
-                            updatedAt: new Date().toISOString(),
-                        }
-                        : task,
-                ),
-            }
-        }
-
+            return { ...state, users: [...state.users, newUser] }
+            
         default:
             return state
     }
 }
 
+// =================================================================
+// CONTEXTO Y PROVIDER
+// =================================================================
+
 const AppContext = createContext<{
-    state: AppState
-    dispatch: React.Dispatch<AppAction>
+    state: AppDataState
+    dispatch: React.Dispatch<AppDataAction>
 } | null>(null)
 
 export function AppProvider({ children }: { children: ReactNode }) {
     const [state, dispatch] = useReducer(appReducer, initialState)
 
-    return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>
+    return (
+        <AppContext.Provider value={{ state, dispatch }}>
+            {children}
+        </AppContext.Provider>
+    )
 }
 
 export function useApp() {
@@ -765,3 +468,102 @@ export function useApp() {
     }
     return context
 }
+
+// =================================================================
+// HOOKS PERSONALIZADOS REFACTORIZADOS
+// =================================================================
+
+// Hook para obtener usuario completo
+export const useUserWithDetails = (userId: string) => {
+    const { state } = useApp()
+    const user = state.users.find(u => u.id === userId)
+    const profile = state.userProfiles.find(p => p.userId === userId)
+    const roles = state.userRoles.filter(r => r.userId === userId)
+    const settings = state.userSettings.find(s => s.userId === userId)
+    const skills = state.userSkills.filter(s => s.userId === userId)
+    
+    return user ? { user, profile, roles, settings, skills } : null
+}
+
+// Hook para obtener usuario básico
+export const useUserBasic = (userId: string) => {
+    const { state } = useApp()
+    return state.users.find(u => u.id === userId)
+}
+
+// Hook para obtener perfil de usuario
+export const useUserProfile = (userId: string) => {
+    const { state } = useApp()
+    return state.userProfiles.find(p => p.userId === userId)
+}
+
+// Hook para obtener habilidades de usuario
+export const useUserSkills = (userId: string) => {
+    const { state } = useApp()
+    return state.userSkills.filter(s => s.userId === userId)
+}
+
+// Hook para obtener rol de usuario en un espacio
+export const useUserRoleInSpace = (userId: string, spaceId: string) => {
+    const { state } = useApp()
+    return state.userRoles.find(r => r.userId === userId && r.spaceId === spaceId)
+}
+
+// Hook para obtener configuraciones de usuario
+export const useUserSettings = (userId: string) => {
+    const { state } = useApp()
+    return state.userSettings.find(s => s.userId === userId)
+}
+
+// Hook para obtener todas las tareas
+export const useTasksBasic = () => {
+    const { state } = useApp()
+    return state.tasks
+}
+
+// Hook para obtener usuario actual
+export const useCurrentUser = () => {
+    const { state } = useApp()
+    return state.users.find(u => u.id === state.currentUserId)
+}
+
+// Hook para obtener todos los usuarios
+export const useAllUsers = () => {
+    const { state } = useApp()
+    return state.users
+}
+
+// Hook para obtener estadísticas de usuario
+export const useUserStats = (userId: string) => {
+    const { state } = useApp()
+    const userTasks = state.tasks.filter(t => t.assigneeId === userId)
+    const completedTasks = userTasks.filter(t => t.completed).length
+    const totalTasks = userTasks.length
+    
+    return {
+        totalTasks,
+        completedTasks,
+        inProgressTasks: userTasks.filter(t => t.status === "en-progreso").length,
+        pendingTasks: totalTasks - completedTasks,
+    }
+}
+
+// Hook para obtener estadísticas del equipo
+export const useTeamStats = () => {
+    const { state } = useApp()
+    const totalTasks = state.tasks.length
+    const completedTasks = state.tasks.filter(t => t.completed).length
+    
+    return {
+        totalTasks,
+        completedTasks,
+        activeUsers: state.users.filter(u => u.status === "activo").length,
+        totalSpaces: state.spaces.length,
+        totalGoals: state.goals.length,
+        completedGoals: state.goals.filter(g => g.completed).length,
+    }
+}
+
+// Exportar tipos principales para uso en otros archivos
+export type { AppDataAction, AppDataState }
+
