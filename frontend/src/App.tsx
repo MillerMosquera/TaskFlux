@@ -16,9 +16,6 @@ function App() {
     const location = useLocation();
     const isDashboard = location.pathname.startsWith('/dashboard');
 
-    // Debug temporal
-    console.log('Current pathname:', location.pathname);
-    console.log('Is dashboard?', isDashboard);
 
     // Si estamos en dashboard, solo renderizar el dashboard
     if (isDashboard) {
@@ -26,7 +23,7 @@ function App() {
             <Routes>
                 <Route path="/dashboard/*" element={<Dashboard/>}>
                     <Route index element={<DashboardHome/>} />
-                    <Route path="playground" element={<HomeView/>} />
+                    <Route path="inicio" element={<HomeView/>} />
                     <Route path="metas" element={<DashboardGoal/>} />
                     <Route path="calendario" element={<CalendarioView/>} />
                     <Route path="equipo" element={<EquipoView/>} />

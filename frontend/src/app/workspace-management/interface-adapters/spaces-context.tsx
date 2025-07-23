@@ -1,6 +1,15 @@
 import { Briefcase, FileText, Folder, LucideIcon } from 'lucide-react'
 import { createContext, ReactNode, useContext, useState } from 'react'
 
+export interface SpaceMember {
+  id: string
+  name: string
+  email: string
+  avatar?: string
+  role: 'owner' | 'admin' | 'member' | 'viewer'
+  joinedAt: Date
+}
+
 export interface Project {
   id: string
   name: string
@@ -8,6 +17,7 @@ export interface Project {
   icon: LucideIcon
   createdAt: Date
   updatedAt: Date
+  members: SpaceMember[]
 }
 
 export interface Space {
@@ -16,14 +26,18 @@ export interface Space {
   description?: string
   icon: LucideIcon
   projects: Project[]
+  members: SpaceMember[]
+  teamId: string // ID del equipo al que pertenece
   createdAt: Date
   updatedAt: Date
 }
 
 interface SpacesContextType {
   spaces: Space[]
-  addSpace: (space: Omit<Space, 'id' | 'createdAt' | 'updatedAt' | 'projects'>) => void
-  addProject: (spaceId: string, project: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>) => void
+  addSpace: (space: Omit<Space, 'id' | 'createdAt' | 'updatedAt' | 'projects' | 'members'>) => void
+  addProject: (spaceId: string, project: Omit<Project, 'id' | 'createdAt' | 'updatedAt' | 'members'>) => void
+  addMemberToSpace: (spaceId: string, member: Omit<SpaceMember, 'id' | 'joinedAt'>) => void
+  addMemberToProject: (spaceId: string, projectId: string, member: Omit<SpaceMember, 'id' | 'joinedAt'>) => void
   deleteSpace: (spaceId: string) => void
   deleteProject: (spaceId: string, projectId: string) => void
 }
@@ -45,8 +59,18 @@ const initialSpaces: Space[] = [
     name: 'Work Space',
     description: 'Proyectos de trabajo',
     icon: Briefcase,
+    teamId: '1',
     createdAt: new Date(),
     updatedAt: new Date(),
+    members: [
+      {
+        id: '1',
+        name: 'Usuario Principal',
+        email: 'm@example.com',
+        role: 'owner',
+        joinedAt: new Date(),
+      }
+    ],
     projects: [
       {
         id: '1',
@@ -55,6 +79,15 @@ const initialSpaces: Space[] = [
         icon: FileText,
         createdAt: new Date(),
         updatedAt: new Date(),
+        members: [
+          {
+            id: '1',
+            name: 'Usuario Principal',
+            email: 'm@example.com',
+            role: 'owner',
+            joinedAt: new Date(),
+          }
+        ]
       },
       {
         id: '2',
@@ -63,6 +96,15 @@ const initialSpaces: Space[] = [
         icon: FileText,
         createdAt: new Date(),
         updatedAt: new Date(),
+        members: [
+          {
+            id: '1',
+            name: 'Usuario Principal',
+            email: 'm@example.com',
+            role: 'owner',
+            joinedAt: new Date(),
+          }
+        ]
       }
     ]
   },
@@ -71,8 +113,18 @@ const initialSpaces: Space[] = [
     name: 'Personal',
     description: 'Proyectos personales',
     icon: Folder,
+    teamId: '1',
     createdAt: new Date(),
     updatedAt: new Date(),
+    members: [
+      {
+        id: '1',
+        name: 'Usuario Principal',
+        email: 'm@example.com',
+        role: 'owner',
+        joinedAt: new Date(),
+      }
+    ],
     projects: [
       {
         id: '3',
@@ -81,6 +133,15 @@ const initialSpaces: Space[] = [
         icon: FileText,
         createdAt: new Date(),
         updatedAt: new Date(),
+        members: [
+          {
+            id: '1',
+            name: 'Usuario Principal',
+            email: 'm@example.com',
+            role: 'owner',
+            joinedAt: new Date(),
+          }
+        ]
       }
     ]
   }
@@ -89,21 +150,35 @@ const initialSpaces: Space[] = [
 export function SpacesProvider({ children }: { children: ReactNode }) {
   const [spaces, setSpaces] = useState<Space[]>(initialSpaces)
 
-  const addSpace = (newSpace: Omit<Space, 'id' | 'createdAt' | 'updatedAt' | 'projects'>) => {
+  const addSpace = (newSpace: Omit<Space, 'id' | 'createdAt' | 'updatedAt' | 'projects' | 'members'>) => {
     const space: Space = {
       ...newSpace,
       id: Date.now().toString(),
       projects: [],
+      members: [{
+        id: 'current-user',
+        name: 'Usuario Principal',
+        email: 'm@example.com',
+        role: 'owner',
+        joinedAt: new Date(),
+      }],
       createdAt: new Date(),
       updatedAt: new Date(),
     }
     setSpaces(prev => [...prev, space])
   }
 
-  const addProject = (spaceId: string, newProject: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const addProject = (spaceId: string, newProject: Omit<Project, 'id' | 'createdAt' | 'updatedAt' | 'members'>) => {
     const project: Project = {
       ...newProject,
       id: Date.now().toString(),
+      members: [{
+        id: 'current-user',
+        name: 'Usuario Principal',
+        email: 'm@example.com',
+        role: 'owner',
+        joinedAt: new Date(),
+      }],
       createdAt: new Date(),
       updatedAt: new Date(),
     }
@@ -111,6 +186,41 @@ export function SpacesProvider({ children }: { children: ReactNode }) {
     setSpaces(prev => prev.map(space => 
       space.id === spaceId 
         ? { ...space, projects: [...space.projects, project], updatedAt: new Date() }
+        : space
+    ))
+  }
+
+  const addMemberToSpace = (spaceId: string, newMember: Omit<SpaceMember, 'id' | 'joinedAt'>) => {
+    const member: SpaceMember = {
+      ...newMember,
+      id: Date.now().toString(),
+      joinedAt: new Date(),
+    }
+    
+    setSpaces(prev => prev.map(space => 
+      space.id === spaceId 
+        ? { ...space, members: [...space.members, member] }
+        : space
+    ))
+  }
+
+  const addMemberToProject = (spaceId: string, projectId: string, newMember: Omit<SpaceMember, 'id' | 'joinedAt'>) => {
+    const member: SpaceMember = {
+      ...newMember,
+      id: Date.now().toString(),
+      joinedAt: new Date(),
+    }
+    
+    setSpaces(prev => prev.map(space => 
+      space.id === spaceId 
+        ? { 
+            ...space, 
+            projects: space.projects.map(project =>
+              project.id === projectId
+                ? { ...project, members: [...project.members, member] }
+                : project
+            )
+          }
         : space
     ))
   }
@@ -132,6 +242,8 @@ export function SpacesProvider({ children }: { children: ReactNode }) {
       spaces,
       addSpace,
       addProject,
+      addMemberToSpace,
+      addMemberToProject,
       deleteSpace,
       deleteProject,
     }}>
