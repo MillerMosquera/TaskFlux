@@ -57,8 +57,9 @@
     "@yoopta/video": "^4.9.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
-    "framer-motion": "^12.23.3",
+    "framer-motion": "^12.23.9",
     "lucide-react": "^0.525.0",
     "next-themes": "^0.4.6",
     "react": "^19.1.0",
@@ -71,7 +72,8 @@
     "slate-dom": "^0.117.4",
     "slate-react": "^0.117.4",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.11"
+    "tailwindcss": "^4.1.11",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",

@@ -1,10 +1,11 @@
 import {
-    ChevronRight,
-    Edit,
-    FolderPlus,
-    MoreHorizontal,
-    Plus,
-    Trash2,
+  ChevronRight,
+  Edit,
+  Eye,
+  FolderPlus,
+  MoreHorizontal,
+  Plus,
+  Trash2,
 } from "lucide-react"
 import { useState } from "react"
 
@@ -12,28 +13,28 @@ import { CreateProjectModal } from "@/app/project-management/delivery/modals/cre
 import { CreateSpaceModal } from "@/app/workspace-management/delivery/modals/create-space-modal"
 import { useSpaces } from "@/app/workspace-management/interface-adapters/spaces-context"
 import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
 } from "@/shared/ui/collapsible"
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu"
 import {
-    SidebarGroup,
-    SidebarGroupLabel,
-    SidebarMenu,
-    SidebarMenuAction,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    SidebarMenuSub,
-    SidebarMenuSubButton,
-    SidebarMenuSubItem,
-    useSidebar,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuAction,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  useSidebar,
 } from "@/shared/ui/sidebar"
 import { useNavigate } from "react-router-dom"
 
@@ -73,6 +74,10 @@ export function NavSpaces() {
   const handleCreateProject = (spaceId: string) => {
     setSelectedSpaceForProject(spaceId)
     setCreateProjectModalOpen(true)
+  }
+
+  const handleViewAllProjects = (spaceId: string) => {
+    navigate(`/dashboard/space/${spaceId}/projects`)
   }
 
   return (
@@ -123,6 +128,10 @@ export function NavSpaces() {
                   side={isMobile ? "bottom" : "right"}
                   align={isMobile ? "end" : "start"}
                 >
+                  <DropdownMenuItem onClick={() => handleViewAllProjects(space.id)}>
+                    <Eye className="mr-2 h-4 w-4 text-muted-foreground" />
+                    <span>Ver todos los proyectos</span>
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => handleCreateProject(space.id)}>
                     <Plus className="mr-2 h-4 w-4 text-muted-foreground" />
                     <span>Nuevo Proyecto</span>

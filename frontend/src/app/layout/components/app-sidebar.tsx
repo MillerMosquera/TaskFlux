@@ -1,4 +1,5 @@
 import {
+  Briefcase,
   Calendar,
   Frame,
   GalleryVerticalEnd,
@@ -40,6 +41,11 @@ const data = {
       url: "/dashboard/inicio",
       icon: Home,
       isActive: true,
+    },
+    {
+      title: "Proyectos",
+      url: "/dashboard/proyectos",
+      icon: Briefcase,
     },
     {
       title: "Metas",

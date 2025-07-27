@@ -2,14 +2,16 @@ import Header from "@/app/layout/Header";
 import MainLayout from "@/app/layout/MainLayout";
 import { Route, Routes, useLocation } from 'react-router-dom';
 
-import Dashboard from "@/app/layout/Dashboard";
-import { CalendarioView } from "@/app/time-management/delivery/views/CalendarioView";
-import DashboardGoal from "@/app/goal-tracking/delivery/views/DashboardGoalView";
-import { DashboardHome } from "@/app/dashboard-overview/delivery/views/DashboardHomeView";
-import { EquipoView } from "@/app/team-collaboration/delivery/views/EquipoView";
-import { HomeView } from "@/app/dashboard-overview/delivery/views/HomeView";
-import ProjectView from "@/app/project-management/delivery/views/ProjectView";
 import { ExcalidrawsView } from "@/app/collaboration-tools/delivery/views/ExcaliDrawsView";
+import { DashboardHome } from "@/app/dashboard-overview/delivery/views/DashboardHomeView";
+import { HomeView } from "@/app/dashboard-overview/delivery/views/HomeView";
+import DashboardGoal from "@/app/goal-tracking/delivery/views/DashboardGoalView";
+import Dashboard from "@/app/layout/Dashboard";
+import Projects from "@/app/project-management/delivery/views/projects";
+import ProjectView from "@/app/project-management/delivery/views/ProjectView";
+import { SpaceProjectsView } from "@/app/project-management/delivery/views/SpaceProjectsView";
+import { EquipoView } from "@/app/team-collaboration/delivery/views/EquipoView";
+import { CalendarioView } from "@/app/time-management/delivery/views/CalendarioView";
 import './App.css';
 
 function App() {
@@ -27,8 +29,10 @@ function App() {
                     <Route path="metas" element={<DashboardGoal/>} />
                     <Route path="calendario" element={<CalendarioView/>} />
                     <Route path="equipo" element={<EquipoView/>} />
+                    <Route path="proyectos" element={<Projects/>} />
                     <Route path="excalidraw" element={<ExcalidrawsView/>} />
                     <Route path="project/:projectId" element={<ProjectView/>} />
+                    <Route path="space/:spaceId/projects" element={<SpaceProjectsView/>} />
                 </Route>
             </Routes>
         );
