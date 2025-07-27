@@ -1,7 +1,17 @@
-import { Activity, CheckCircle, Users } from "lucide-react"
+import { Activity, CheckCircle, Users } from "lucide-react";
 
 // NOTA: Para colores de roles, usar config/ui-config.ts con getRoleConfig()
 // Esto evita duplicación y mantiene consistencia visual
+
+// Helper function para obtener equipos del usuario
+export const getUserTeams = (userId: string, state: any) => {
+  const userRoles = state.userRoles?.filter((ur: any) => ur.userId === userId) || [];
+  const teamNames = userRoles.map((ur: any) => {
+    const space = state.spaces?.find((s: any) => s.id === ur.spaceId);
+    return space?.name || 'Sin equipo';
+  });
+  return teamNames.length > 0 ? teamNames : ['Sin equipo'];
+};
 
 export const getUserStats = (userId: string, state: any) => {
     const userTasks = state.tasks.filter((task: any) => task.assigneeId === userId)
@@ -27,15 +37,6 @@ export const getRoleIcon = (role: string) => {
         default:
             return Users
     }
-}
-
-export interface TeamStatsProps {
-  stats: {
-    totalMembers: number
-    activeMembers: number
-    admins: number
-    avgCompletion: number
-  }
 }
 
 // Interfaz para los datos del usuario con información adicional del equipo

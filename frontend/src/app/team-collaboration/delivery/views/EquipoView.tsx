@@ -1,9 +1,9 @@
-import { TeamView } from "@/app/team-collaboration/delivery/team/view/TeamView";
+import { TeamViewCircle } from "@/app/team-collaboration/delivery/team/view/TeamViewCircle";
 
 export function EquipoView() {
     return (
-        <div className="space-y-6">
-          <TeamView/>
+        <div className="w-full">
+          <TeamViewCircle/>
         </div>
     )
 }
