@@ -11,5 +11,6 @@ import java.util.UUID;
 @Repository
 public interface SpaceRepository extends JpaRepository<Space, UUID> {
     List<Space> findByCreatedBy_Id(UUID createdById);
+
     Optional<Space> findByName(String name);
 }

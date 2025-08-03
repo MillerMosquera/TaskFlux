@@ -10,5 +10,6 @@ import java.util.UUID;
 @Repository
 public interface TaskListRepository extends JpaRepository<TaskList, UUID> {
     List<TaskList> findBySpaceId(UUID spaceId);
+
     List<TaskList> findByCreatedBy_Id(UUID createdByUserId);
 }

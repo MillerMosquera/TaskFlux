@@ -1,1 +1,88 @@
-package org.miller.backend.controller;import org.miller.backend.model.Task;import org.miller.backend.service.TaskService;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.http.HttpStatus;import org.springframework.http.ResponseEntity;import org.springframework.web.bind.annotation.*;import java.util.List;import java.util.UUID;@RestController@RequestMapping("/api/tasks")public class TaskController {    @Autowired    private TaskService taskService;    @GetMapping    public List<Task> getAllTasks() {        return taskService.getAllTasks();    }    @GetMapping("/{id}")    public ResponseEntity<Task> getTaskById(@PathVariable UUID id) {        return taskService.getTaskById(id)                .map(ResponseEntity::ok)                .orElse(ResponseEntity.notFound().build());    }    @PostMapping    public ResponseEntity<Task> createTask(@RequestBody Task task) {        Task createdTask = taskService.createTask(task);        return new ResponseEntity<>(createdTask, HttpStatus.CREATED);    }    @PutMapping("/{id}")    public ResponseEntity<Task> updateTask(@PathVariable UUID id, @RequestBody Task taskDetails) {        try {            Task updatedTask = taskService.updateTask(id, taskDetails);            return ResponseEntity.ok(updatedTask);        } catch (RuntimeException e) {            return ResponseEntity.notFound().build();        }    }    @DeleteMapping("/{id}")    public ResponseEntity<Void> deleteTask(@PathVariable UUID id) {        taskService.deleteTask(id);        return ResponseEntity.noContent().build();    }    @GetMapping("/createdby/{createdByUserId}")    public List<Task> getTasksByCreatedBy(@PathVariable UUID createdByUserId) {        return taskService.getTasksByCreatedBy(createdByUserId);    }    @GetMapping("/assignedto/{assignedToUserId}")    public List<Task> getTasksByAssignedTo(@PathVariable UUID assignedToUserId) {        return taskService.getTasksByAssignedTo(assignedToUserId);    }    @GetMapping("/space/{spaceId}")    public List<Task> getTasksBySpaceId(@PathVariable UUID spaceId) {        return taskService.getTasksBySpaceId(spaceId);    }    @GetMapping("/list/{listId}")    public List<Task> getTasksByListId(@PathVariable UUID listId) {        return taskService.getTasksByListId(listId);    }    @GetMapping("/goal/{goalId}")    public List<Task> getTasksByGoalId(@PathVariable UUID goalId) {        return taskService.getTasksByGoalId(goalId);    }    @GetMapping("/status/{status}")    public List<Task> getTasksByStatus(@PathVariable String status) {        return taskService.getTasksByStatus(status);    }    @GetMapping("/priority/{priority}")    public List<Task> getTasksByPriority(@PathVariable String priority) {        return taskService.getTasksByPriority(priority);    }}
+package org.miller.backend.controller;
+
+import org.miller.backend.model.Task;
+import org.miller.backend.service.TaskService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/tasks")
+public class TaskController {
+
+    @Autowired
+    private TaskService taskService;
+
+    @GetMapping
+    public List<Task> getAllTasks() {
+        return taskService.getAllTasks();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Task> getTaskById(@PathVariable UUID id) {
+        return taskService.getTaskById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+        Task createdTask = taskService.createTask(task);
+        return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Task> updateTask(@PathVariable UUID id, @RequestBody Task taskDetails) {
+        try {
+            Task updatedTask = taskService.updateTask(id, taskDetails);
+            return ResponseEntity.ok(updatedTask);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable UUID id) {
+        taskService.deleteTask(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/createdby/{createdByUserId}")
+    public List<Task> getTasksByCreatedBy(@PathVariable UUID createdByUserId) {
+        return taskService.getTasksByCreatedBy(createdByUserId);
+    }
+
+    @GetMapping("/assignedto/{assignedToUserId}")
+    public List<Task> getTasksByAssignedTo(@PathVariable UUID assignedToUserId) {
+        return taskService.getTasksByAssignedTo(assignedToUserId);
+    }
+
+    @GetMapping("/space/{spaceId}")
+    public List<Task> getTasksBySpaceId(@PathVariable UUID spaceId) {
+        return taskService.getTasksBySpaceId(spaceId);
+    }
+
+    @GetMapping("/list/{listId}")
+    public List<Task> getTasksByListId(@PathVariable UUID listId) {
+        return taskService.getTasksByListId(listId);
+    }
+
+    @GetMapping("/goal/{goalId}")
+    public List<Task> getTasksByGoalId(@PathVariable UUID goalId) {
+        return taskService.getTasksByGoalId(goalId);
+    }
+
+    @GetMapping("/status/{status}")
+    public List<Task> getTasksByStatus(@PathVariable String status) {
+        return taskService.getTasksByStatus(status);
+    }
+
+    @GetMapping("/priority/{priority}")
+    public List<Task> getTasksByPriority(@PathVariable String priority) {
+        return taskService.getTasksByPriority(priority);
+    }
+}

@@ -10,5 +10,6 @@ import java.util.UUID;
 @Repository
 public interface GoalRepository extends JpaRepository<Goal, UUID> {
     List<Goal> findBySpaceId(UUID spaceId);
+
     List<Goal> findByCreatedBy_Id(UUID createdBy);
 }

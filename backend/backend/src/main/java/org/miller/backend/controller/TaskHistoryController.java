@@ -1,1 +1,63 @@
-package org.miller.backend.controller;import org.miller.backend.model.TaskHistory;import org.miller.backend.service.TaskHistoryService;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.http.HttpStatus;import org.springframework.http.ResponseEntity;import org.springframework.web.bind.annotation.*;import java.util.List;import java.util.UUID;@RestController@RequestMapping("/api/taskhistory")public class TaskHistoryController {    @Autowired    private TaskHistoryService taskHistoryService;    @GetMapping    public List<TaskHistory> getAllTaskHistoryEntries() {        return taskHistoryService.getAllTaskHistoryEntries();    }    @GetMapping("/{id}")    public ResponseEntity<TaskHistory> getTaskHistoryById(@PathVariable UUID id) {        return taskHistoryService.getTaskHistoryById(id)                .map(ResponseEntity::ok)                .orElse(ResponseEntity.notFound().build());    }    @PostMapping    public ResponseEntity<TaskHistory> createTaskHistory(@RequestBody TaskHistory taskHistory) {        TaskHistory createdTaskHistory = taskHistoryService.createTaskHistory(taskHistory);        return new ResponseEntity<>(createdTaskHistory, HttpStatus.CREATED);    }    @PutMapping("/{id}")    public ResponseEntity<TaskHistory> updateTaskHistory(@PathVariable UUID id, @RequestBody TaskHistory taskHistoryDetails) {        try {            TaskHistory updatedTaskHistory = taskHistoryService.updateTaskHistory(id, taskHistoryDetails);            return ResponseEntity.ok(updatedTaskHistory);        } catch (RuntimeException e) {            return ResponseEntity.notFound().build();        }    }    @DeleteMapping("/{id}")    public ResponseEntity<Void> deleteTaskHistory(@PathVariable UUID id) {        taskHistoryService.deleteTaskHistory(id);        return ResponseEntity.noContent().build();    }    @GetMapping("/task/{taskId}")    public List<TaskHistory> getTaskHistoryByTaskId(@PathVariable UUID taskId) {        return taskHistoryService.getTaskHistoryByTaskId(taskId);    }    @GetMapping("/user/{userId}")    public List<TaskHistory> getTaskHistoryByUserId(@PathVariable UUID userId) {        return taskHistoryService.getTaskHistoryByUserId(userId);    }}
+package org.miller.backend.controller;
+
+import org.miller.backend.model.TaskHistory;
+import org.miller.backend.service.TaskHistoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/taskhistory")
+public class TaskHistoryController {
+
+    @Autowired
+    private TaskHistoryService taskHistoryService;
+
+    @GetMapping
+    public List<TaskHistory> getAllTaskHistoryEntries() {
+        return taskHistoryService.getAllTaskHistoryEntries();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskHistory> getTaskHistoryById(@PathVariable UUID id) {
+        return taskHistoryService.getTaskHistoryById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<TaskHistory> createTaskHistory(@RequestBody TaskHistory taskHistory) {
+        TaskHistory createdTaskHistory = taskHistoryService.createTaskHistory(taskHistory);
+        return new ResponseEntity<>(createdTaskHistory, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskHistory> updateTaskHistory(@PathVariable UUID id, @RequestBody TaskHistory taskHistoryDetails) {
+        try {
+            TaskHistory updatedTaskHistory = taskHistoryService.updateTaskHistory(id, taskHistoryDetails);
+            return ResponseEntity.ok(updatedTaskHistory);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTaskHistory(@PathVariable UUID id) {
+        taskHistoryService.deleteTaskHistory(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/task/{taskId}")
+    public List<TaskHistory> getTaskHistoryByTaskId(@PathVariable UUID taskId) {
+        return taskHistoryService.getTaskHistoryByTaskId(taskId);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<TaskHistory> getTaskHistoryByUserId(@PathVariable UUID userId) {
+        return taskHistoryService.getTaskHistoryByUserId(userId);
+    }
+}

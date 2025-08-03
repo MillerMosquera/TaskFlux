@@ -1,11 +1,10 @@
 package org.miller.backend.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Builder;
-
-import jakarta.persistence.*;
 
 import java.util.UUID;
 
@@ -16,22 +15,22 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class UserSkill {
-    
+
     @Id
     private UUID id;
-    
+
     @Column(name = "user_id", nullable = false)
     private UUID userId;
-    
+
     @Column(name = "skill_name", nullable = false)
     private String skillName;
-    
+
     @Column(name = "proficiency_level")
     private String proficiencyLevel;
-    
+
     @Column(name = "years_experience")
     private Integer yearsExperience;
-    
+
     // Relationships
     @ManyToOne
     @JoinColumn(name = "user_id", insertable = false, updatable = false)

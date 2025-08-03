@@ -1,1 +1,63 @@
-package org.miller.backend.controller;import org.miller.backend.model.TaskAttachment;import org.miller.backend.service.TaskAttachmentService;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.http.HttpStatus;import org.springframework.http.ResponseEntity;import org.springframework.web.bind.annotation.*;import java.util.List;import java.util.UUID;@RestController@RequestMapping("/api/taskattachments")public class TaskAttachmentController {    @Autowired    private TaskAttachmentService taskAttachmentService;    @GetMapping    public List<TaskAttachment> getAllTaskAttachments() {        return taskAttachmentService.getAllTaskAttachments();    }    @GetMapping("/{id}")    public ResponseEntity<TaskAttachment> getTaskAttachmentById(@PathVariable UUID id) {        return taskAttachmentService.getTaskAttachmentById(id)                .map(ResponseEntity::ok)                .orElse(ResponseEntity.notFound().build());    }    @PostMapping    public ResponseEntity<TaskAttachment> createTaskAttachment(@RequestBody TaskAttachment taskAttachment) {        TaskAttachment createdTaskAttachment = taskAttachmentService.createTaskAttachment(taskAttachment);        return new ResponseEntity<>(createdTaskAttachment, HttpStatus.CREATED);    }    @PutMapping("/{id}")    public ResponseEntity<TaskAttachment> updateTaskAttachment(@PathVariable UUID id, @RequestBody TaskAttachment taskAttachmentDetails) {        try {            TaskAttachment updatedTaskAttachment = taskAttachmentService.updateTaskAttachment(id, taskAttachmentDetails);            return ResponseEntity.ok(updatedTaskAttachment);        } catch (RuntimeException e) {            return ResponseEntity.notFound().build();        }    }    @DeleteMapping("/{id}")    public ResponseEntity<Void> deleteTaskAttachment(@PathVariable UUID id) {        taskAttachmentService.deleteTaskAttachment(id);        return ResponseEntity.noContent().build();    }    @GetMapping("/task/{taskId}")    public List<TaskAttachment> getTaskAttachmentsByTaskId(@PathVariable UUID taskId) {        return taskAttachmentService.getTaskAttachmentsByTaskId(taskId);    }    @GetMapping("/uploadedby/{uploadedByUserId}")    public List<TaskAttachment> getTaskAttachmentsByUploadedBy(@PathVariable UUID uploadedByUserId) {        return taskAttachmentService.getTaskAttachmentsByUploadedBy(uploadedByUserId);    }}
+package org.miller.backend.controller;
+
+import org.miller.backend.model.TaskAttachment;
+import org.miller.backend.service.TaskAttachmentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/taskattachments")
+public class TaskAttachmentController {
+
+    @Autowired
+    private TaskAttachmentService taskAttachmentService;
+
+    @GetMapping
+    public List<TaskAttachment> getAllTaskAttachments() {
+        return taskAttachmentService.getAllTaskAttachments();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskAttachment> getTaskAttachmentById(@PathVariable UUID id) {
+        return taskAttachmentService.getTaskAttachmentById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<TaskAttachment> createTaskAttachment(@RequestBody TaskAttachment taskAttachment) {
+        TaskAttachment createdTaskAttachment = taskAttachmentService.createTaskAttachment(taskAttachment);
+        return new ResponseEntity<>(createdTaskAttachment, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskAttachment> updateTaskAttachment(@PathVariable UUID id, @RequestBody TaskAttachment taskAttachmentDetails) {
+        try {
+            TaskAttachment updatedTaskAttachment = taskAttachmentService.updateTaskAttachment(id, taskAttachmentDetails);
+            return ResponseEntity.ok(updatedTaskAttachment);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTaskAttachment(@PathVariable UUID id) {
+        taskAttachmentService.deleteTaskAttachment(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/task/{taskId}")
+    public List<TaskAttachment> getTaskAttachmentsByTaskId(@PathVariable UUID taskId) {
+        return taskAttachmentService.getTaskAttachmentsByTaskId(taskId);
+    }
+
+    @GetMapping("/uploadedby/{uploadedByUserId}")
+    public List<TaskAttachment> getTaskAttachmentsByUploadedBy(@PathVariable UUID uploadedByUserId) {
+        return taskAttachmentService.getTaskAttachmentsByUploadedBy(uploadedByUserId);
+    }
+}

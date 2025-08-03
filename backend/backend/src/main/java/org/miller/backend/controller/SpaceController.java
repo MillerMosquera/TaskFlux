@@ -1,1 +1,80 @@
-package org.miller.backend.controller;import org.miller.backend.model.Space;import org.miller.backend.service.SpaceService;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.http.HttpStatus;import org.springframework.http.ResponseEntity;import org.springframework.web.bind.annotation.*;import java.util.List;import java.util.UUID;@RestController@RequestMapping("/api/spaces")public class SpaceController {    @Autowired    private SpaceService spaceService;    @GetMapping("/{id}")    public ResponseEntity<Space> getSpaceById(@PathVariable String id) {        try {            UUID uuid = UUID.fromString(id);            return spaceService.getSpaceById(uuid)                    .map(ResponseEntity::ok)                    .orElse(ResponseEntity.notFound().build());        } catch (IllegalArgumentException e) {            return ResponseEntity.badRequest().build();        }    }    @PostMapping    public ResponseEntity<Space> createSpace(@RequestBody Space space) {        Space createdSpace = spaceService.createSpace(space);        return new ResponseEntity<>(createdSpace, HttpStatus.CREATED);    }    @PutMapping("/{id}")    public ResponseEntity<Space> updateSpace(@PathVariable String id, @RequestBody Space spaceDetails) {        try {            UUID uuid = UUID.fromString(id);            Space updatedSpace = spaceService.updateSpace(uuid, spaceDetails);            return ResponseEntity.ok(updatedSpace);        } catch (IllegalArgumentException e) {            return ResponseEntity.badRequest().build();        } catch (RuntimeException e) {            return ResponseEntity.notFound().build();        }    }    @DeleteMapping("/{id}")    public ResponseEntity<Void> deleteSpace(@PathVariable String id) {        try {            UUID uuid = UUID.fromString(id);            spaceService.deleteSpace(uuid);            return ResponseEntity.noContent().build();        } catch (IllegalArgumentException e) {            return ResponseEntity.badRequest().build();        }    }    @GetMapping("/createdby/{createdByUserId}")    public List<Space> getSpacesByCreatedBy(@PathVariable String createdByUserId) {        try {            UUID uuid = UUID.fromString(createdByUserId);            return spaceService.getSpacesByCreatedBy(uuid);        } catch (IllegalArgumentException e) {            throw new RuntimeException("Invalid UUID format");        }    }    @GetMapping("/name/{name}")    public ResponseEntity<Space> getSpaceByName(@PathVariable String name) {        return spaceService.getSpaceByName(name)                .map(ResponseEntity::ok)                .orElse(ResponseEntity.notFound().build());    }}
+package org.miller.backend.controller;
+
+import org.miller.backend.model.Space;
+import org.miller.backend.service.SpaceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+
+@RestController
+@RequestMapping("/api/spaces")
+public class SpaceController {
+
+    @Autowired
+    private SpaceService spaceService;
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Space> getSpaceById(@PathVariable String id) {
+        try {
+            UUID uuid = UUID.fromString(id);
+            return spaceService.getSpaceById(uuid)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<Space> createSpace(@RequestBody Space space) {
+        Space createdSpace = spaceService.createSpace(space);
+        return new ResponseEntity<>(createdSpace, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Space> updateSpace(@PathVariable String id, @RequestBody Space spaceDetails) {
+        try {
+            UUID uuid = UUID.fromString(id);
+            Space updatedSpace = spaceService.updateSpace(uuid, spaceDetails);
+            return ResponseEntity.ok(updatedSpace);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSpace(@PathVariable String id) {
+        try {
+            UUID uuid = UUID.fromString(id);
+            spaceService.deleteSpace(uuid);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/createdby/{createdByUserId}")
+    public List<Space> getSpacesByCreatedBy(@PathVariable String createdByUserId) {
+        try {
+            UUID uuid = UUID.fromString(createdByUserId);
+            return spaceService.getSpacesByCreatedBy(uuid);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid UUID format");
+        }
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Space> getSpaceByName(@PathVariable String name) {
+        return spaceService.getSpaceByName(name)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

@@ -1,1 +1,64 @@
-package org.miller.backend.service.impl;import org.miller.backend.model.TaskComment;import org.miller.backend.repository.TaskCommentRepository;import org.miller.backend.service.TaskCommentService;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.stereotype.Service;import java.time.LocalDateTime;import java.util.List;import java.util.Optional;import java.util.UUID;@Servicepublic class TaskCommentServiceImpl implements TaskCommentService {    @Autowired    private TaskCommentRepository taskCommentRepository;    @Override    public List<TaskComment> getAllTaskComments() {        return taskCommentRepository.findAll();    }    @Override    public Optional<TaskComment> getTaskCommentById(UUID id) {        return taskCommentRepository.findById(id);    }    @Override    public TaskComment createTaskComment(TaskComment taskComment) {        taskComment.setId(UUID.randomUUID());        taskComment.setCreatedAt(LocalDateTime.now());        taskComment.setUpdatedAt(LocalDateTime.now());        return taskCommentRepository.save(taskComment);    }    @Override    public TaskComment updateTaskComment(UUID id, TaskComment taskCommentDetails) {        return taskCommentRepository.findById(id)                .map(taskComment -> {                    taskComment.setTask(taskCommentDetails.getTask());                    taskComment.setUser(taskCommentDetails.getUser());                    taskComment.setContent(taskCommentDetails.getContent());                    taskComment.setUpdatedAt(LocalDateTime.now());                    return taskCommentRepository.save(taskComment);                }).orElseThrow(() -> new RuntimeException("TaskComment not found with id " + id));    }    @Override    public void deleteTaskComment(UUID id) {        taskCommentRepository.deleteById(id);    }    @Override    public List<TaskComment> getTaskCommentsByTaskId(UUID taskId) {        return taskCommentRepository.findByTaskId(taskId);    }    @Override    public List<TaskComment> getTaskCommentsByUserId(UUID userId) {        return taskCommentRepository.findByUserId(userId);    }}
+package org.miller.backend.service.impl;
+
+import org.miller.backend.model.TaskComment;
+import org.miller.backend.repository.TaskCommentRepository;
+import org.miller.backend.service.TaskCommentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+public class TaskCommentServiceImpl implements TaskCommentService {
+
+    @Autowired
+    private TaskCommentRepository taskCommentRepository;
+
+    @Override
+    public List<TaskComment> getAllTaskComments() {
+        return taskCommentRepository.findAll();
+    }
+
+    @Override
+    public Optional<TaskComment> getTaskCommentById(UUID id) {
+        return taskCommentRepository.findById(id);
+    }
+
+    @Override
+    public TaskComment createTaskComment(TaskComment taskComment) {
+        taskComment.setId(UUID.randomUUID());
+        taskComment.setCreatedAt(LocalDateTime.now());
+        taskComment.setUpdatedAt(LocalDateTime.now());
+        return taskCommentRepository.save(taskComment);
+    }
+
+    @Override
+    public TaskComment updateTaskComment(UUID id, TaskComment taskCommentDetails) {
+        return taskCommentRepository.findById(id)
+                .map(taskComment -> {
+                    taskComment.setTask(taskCommentDetails.getTask());
+                    taskComment.setUser(taskCommentDetails.getUser());
+                    taskComment.setContent(taskCommentDetails.getContent());
+                    taskComment.setUpdatedAt(LocalDateTime.now());
+                    return taskCommentRepository.save(taskComment);
+                }).orElseThrow(() -> new RuntimeException("TaskComment not found with id " + id));
+    }
+
+    @Override
+    public void deleteTaskComment(UUID id) {
+        taskCommentRepository.deleteById(id);
+    }
+
+    @Override
+    public List<TaskComment> getTaskCommentsByTaskId(UUID taskId) {
+        return taskCommentRepository.findByTaskId(taskId);
+    }
+
+    @Override
+    public List<TaskComment> getTaskCommentsByUserId(UUID userId) {
+        return taskCommentRepository.findByUserId(userId);
+    }
+}

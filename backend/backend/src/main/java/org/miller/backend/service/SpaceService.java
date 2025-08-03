@@ -1,1 +1,23 @@
-package org.miller.backend.service;import org.miller.backend.model.Space;import java.util.List;import java.util.Optional;import java.util.UUID;public interface SpaceService {    List<Space> getAllSpaces();    Optional<Space> getSpaceById(UUID id);    Space createSpace(Space space);    Space updateSpace(UUID id, Space spaceDetails);    void deleteSpace(UUID id);    List<Space> getSpacesByCreatedBy(UUID createdByUserId);    Optional<Space> getSpaceByName(String name);}
+package org.miller.backend.service;
+
+import org.miller.backend.model.Space;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+public interface SpaceService {
+    List<Space> getAllSpaces();
+
+    Optional<Space> getSpaceById(UUID id);
+
+    Space createSpace(Space space);
+
+    Space updateSpace(UUID id, Space spaceDetails);
+
+    void deleteSpace(UUID id);
+
+    List<Space> getSpacesByCreatedBy(UUID createdByUserId);
+
+    Optional<Space> getSpaceByName(String name);
+}

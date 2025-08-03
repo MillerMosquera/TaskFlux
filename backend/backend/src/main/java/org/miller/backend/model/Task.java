@@ -18,7 +18,7 @@ import java.util.UUID;
 public class Task {
     @Id
     private UUID id;
-    
+
     private String title;
     private String description;
     private String status;
@@ -53,9 +53,9 @@ public class Task {
 
     @ManyToMany
     @JoinTable(
-        name = "task_tags",
-        joinColumns = @JoinColumn(name = "task_id"),
-        inverseJoinColumns = @JoinColumn(name = "tag_id")
+            name = "task_tags",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<Tag> tags;
 

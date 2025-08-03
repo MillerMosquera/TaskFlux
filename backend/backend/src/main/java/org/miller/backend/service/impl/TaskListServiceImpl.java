@@ -1,1 +1,65 @@
-package org.miller.backend.service.impl;import org.miller.backend.model.TaskList;import org.miller.backend.repository.TaskListRepository;import org.miller.backend.service.TaskListService;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.stereotype.Service;import java.time.LocalDateTime;import java.util.List;import java.util.Optional;import java.util.UUID;@Servicepublic class TaskListServiceImpl implements TaskListService {    @Autowired    private TaskListRepository taskListRepository;    @Override    public List<TaskList> getAllTaskLists() {        return taskListRepository.findAll();    }    @Override    public Optional<TaskList> getTaskListById(UUID id) {        return taskListRepository.findById(id);    }    @Override    public TaskList createTaskList(TaskList taskList) {        taskList.setId(UUID.randomUUID());        taskList.setCreatedAt(LocalDateTime.now());        return taskListRepository.save(taskList);    }    @Override    public TaskList updateTaskList(UUID id, TaskList taskListDetails) {        return taskListRepository.findById(id)                .map(taskList -> {                    taskList.setSpace(taskListDetails.getSpace());                    taskList.setName(taskListDetails.getName());                    taskList.setDescription(taskListDetails.getDescription());                    taskList.setCreatedBy(taskListDetails.getCreatedBy());                    // CreatedAt is usually set on creation, but if you want to update it, uncomment below                    // taskList.setCreatedAt(taskListDetails.getCreatedAt());                    return taskListRepository.save(taskList);                }).orElseThrow(() -> new RuntimeException("TaskList not found with id " + id));    }    @Override    public void deleteTaskList(UUID id) {        taskListRepository.deleteById(id);    }    @Override    public List<TaskList> getTaskListsBySpaceId(UUID spaceId) {        return taskListRepository.findBySpaceId(spaceId);    }    @Override    public List<TaskList> getTaskListsByCreatedBy(UUID createdByUserId) {        return taskListRepository.findByCreatedBy_Id(createdByUserId);    }}
+package org.miller.backend.service.impl;
+
+import org.miller.backend.model.TaskList;
+import org.miller.backend.repository.TaskListRepository;
+import org.miller.backend.service.TaskListService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+public class TaskListServiceImpl implements TaskListService {
+
+    @Autowired
+    private TaskListRepository taskListRepository;
+
+    @Override
+    public List<TaskList> getAllTaskLists() {
+        return taskListRepository.findAll();
+    }
+
+    @Override
+    public Optional<TaskList> getTaskListById(UUID id) {
+        return taskListRepository.findById(id);
+    }
+
+    @Override
+    public TaskList createTaskList(TaskList taskList) {
+        taskList.setId(UUID.randomUUID());
+        taskList.setCreatedAt(LocalDateTime.now());
+        return taskListRepository.save(taskList);
+    }
+
+    @Override
+    public TaskList updateTaskList(UUID id, TaskList taskListDetails) {
+        return taskListRepository.findById(id)
+                .map(taskList -> {
+                    taskList.setSpace(taskListDetails.getSpace());
+                    taskList.setName(taskListDetails.getName());
+                    taskList.setDescription(taskListDetails.getDescription());
+                    taskList.setCreatedBy(taskListDetails.getCreatedBy());
+                    // CreatedAt is usually set on creation, but if you want to update it, uncomment below
+                    // taskList.setCreatedAt(taskListDetails.getCreatedAt());
+                    return taskListRepository.save(taskList);
+                }).orElseThrow(() -> new RuntimeException("TaskList not found with id " + id));
+    }
+
+    @Override
+    public void deleteTaskList(UUID id) {
+        taskListRepository.deleteById(id);
+    }
+
+    @Override
+    public List<TaskList> getTaskListsBySpaceId(UUID spaceId) {
+        return taskListRepository.findBySpaceId(spaceId);
+    }
+
+    @Override
+    public List<TaskList> getTaskListsByCreatedBy(UUID createdByUserId) {
+        return taskListRepository.findByCreatedBy_Id(createdByUserId);
+    }
+}

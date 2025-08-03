@@ -10,5 +10,6 @@ import java.util.UUID;
 @Repository
 public interface SubtaskRepository extends JpaRepository<Subtask, UUID> {
     List<Subtask> findByParentTaskId(UUID parentTaskId);
+
     List<Subtask> findByAssignedTo_Id(UUID assignedToUserId);
 }

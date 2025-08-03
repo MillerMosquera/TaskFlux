@@ -1,1 +1,23 @@
-package org.miller.backend.service;import org.miller.backend.model.TaskDependency;import java.util.List;import java.util.Optional;import java.util.UUID;public interface TaskDependencyService {    List<TaskDependency> getAllTaskDependencies();    Optional<TaskDependency> getTaskDependencyById(UUID id);    TaskDependency createTaskDependency(TaskDependency taskDependency);    TaskDependency updateTaskDependency(UUID id, TaskDependency taskDependencyDetails);    void deleteTaskDependency(UUID id);    List<TaskDependency> getTaskDependenciesByTaskId(UUID taskId);    List<TaskDependency> getTaskDependenciesByDependsOnTaskId(UUID dependsOnTaskId);}
+package org.miller.backend.service;
+
+import org.miller.backend.model.TaskDependency;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+public interface TaskDependencyService {
+    List<TaskDependency> getAllTaskDependencies();
+
+    Optional<TaskDependency> getTaskDependencyById(UUID id);
+
+    TaskDependency createTaskDependency(TaskDependency taskDependency);
+
+    TaskDependency updateTaskDependency(UUID id, TaskDependency taskDependencyDetails);
+
+    void deleteTaskDependency(UUID id);
+
+    List<TaskDependency> getTaskDependenciesByTaskId(UUID taskId);
+
+    List<TaskDependency> getTaskDependenciesByDependsOnTaskId(UUID dependsOnTaskId);
+}

@@ -1,1 +1,21 @@
-package org.miller.backend.service;import org.miller.backend.model.UserProfile;import java.util.List;import java.util.Optional;import java.util.UUID;public interface UserProfileService {    List<UserProfile> getAllUserProfiles();    Optional<UserProfile> getUserProfileById(UUID id);    UserProfile createUserProfile(UserProfile userProfile);    UserProfile updateUserProfile(UUID id, UserProfile userProfileDetails);    void deleteUserProfile(UUID id);    Optional<UserProfile> getUserProfileByUserId(UUID userId);}
+package org.miller.backend.service;
+
+import org.miller.backend.model.UserProfile;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+public interface UserProfileService {
+    List<UserProfile> getAllUserProfiles();
+
+    Optional<UserProfile> getUserProfileById(UUID id);
+
+    UserProfile createUserProfile(UserProfile userProfile);
+
+    UserProfile updateUserProfile(UUID id, UserProfile userProfileDetails);
+
+    void deleteUserProfile(UUID id);
+
+    Optional<UserProfile> getUserProfileByUserId(UUID userId);
+}

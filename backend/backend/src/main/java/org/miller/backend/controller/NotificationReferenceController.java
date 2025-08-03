@@ -1,1 +1,70 @@
-package org.miller.backend.controller;import org.miller.backend.model.NotificationReference;import org.miller.backend.service.NotificationReferenceService;import org.springframework.http.HttpStatus;import org.springframework.http.ResponseEntity;import org.springframework.web.bind.annotation.*;import java.util.List;import java.util.UUID;@RestController@RequestMapping("/api/notificationreferences")public class NotificationReferenceController {    private final NotificationReferenceService notificationReferenceService;    public NotificationReferenceController(NotificationReferenceService notificationReferenceService) {        this.notificationReferenceService = notificationReferenceService;    }    @GetMapping    public List<NotificationReference> getAllNotificationReferences() {        return notificationReferenceService.getAllNotificationReferences();    }    @GetMapping("/{id}")    public ResponseEntity<NotificationReference> getNotificationReferenceById(@PathVariable String id) {        try {            UUID uuid = UUID.fromString(id);            return notificationReferenceService.getNotificationReferenceById(uuid)                    .map(ResponseEntity::ok)                    .orElse(ResponseEntity.notFound().build());        } catch (IllegalArgumentException e) {            return ResponseEntity.badRequest().build();        }    }    @PostMapping    public ResponseEntity<NotificationReference> createNotificationReference(@RequestBody NotificationReference notificationReference) {        NotificationReference createdNotificationReference = notificationReferenceService.createNotificationReference(notificationReference);        return new ResponseEntity<>(createdNotificationReference, HttpStatus.CREATED);    }    @PutMapping("/{id}")    public ResponseEntity<NotificationReference> updateNotificationReference(@PathVariable UUID id, @RequestBody NotificationReference notificationReferenceDetails) {        try {            NotificationReference updatedNotificationReference = notificationReferenceService.updateNotificationReference(id, notificationReferenceDetails);            return ResponseEntity.ok(updatedNotificationReference);        } catch (RuntimeException e) {            return ResponseEntity.notFound().build();        }    }    @DeleteMapping("/{id}")    public ResponseEntity<Void> deleteNotificationReference(@PathVariable UUID id) {        notificationReferenceService.deleteNotificationReference(id);        return ResponseEntity.noContent().build();    }    @GetMapping("/notification/{notificationId}")    public List<NotificationReference> getNotificationReferencesByNotificationId(@PathVariable UUID notificationId) {        return notificationReferenceService.getNotificationReferencesByNotificationId(notificationId);    }    @GetMapping("/entity/{entityType}/{entityId}")    public List<NotificationReference> getNotificationReferencesByEntityTypeAndEntityId(@PathVariable String entityType, @PathVariable UUID entityId) {        return notificationReferenceService.getNotificationReferencesByEntityTypeAndEntityId(entityType, entityId);    }}
+package org.miller.backend.controller;
+
+import org.miller.backend.model.NotificationReference;
+import org.miller.backend.service.NotificationReferenceService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/notificationreferences")
+public class NotificationReferenceController {
+
+    private final NotificationReferenceService notificationReferenceService;
+
+    public NotificationReferenceController(NotificationReferenceService notificationReferenceService) {
+        this.notificationReferenceService = notificationReferenceService;
+    }
+
+    @GetMapping
+    public List<NotificationReference> getAllNotificationReferences() {
+        return notificationReferenceService.getAllNotificationReferences();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<NotificationReference> getNotificationReferenceById(@PathVariable String id) {
+        try {
+            UUID uuid = UUID.fromString(id);
+            return notificationReferenceService.getNotificationReferenceById(uuid)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<NotificationReference> createNotificationReference(@RequestBody NotificationReference notificationReference) {
+        NotificationReference createdNotificationReference = notificationReferenceService.createNotificationReference(notificationReference);
+        return new ResponseEntity<>(createdNotificationReference, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<NotificationReference> updateNotificationReference(@PathVariable UUID id, @RequestBody NotificationReference notificationReferenceDetails) {
+        try {
+            NotificationReference updatedNotificationReference = notificationReferenceService.updateNotificationReference(id, notificationReferenceDetails);
+            return ResponseEntity.ok(updatedNotificationReference);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteNotificationReference(@PathVariable UUID id) {
+        notificationReferenceService.deleteNotificationReference(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/notification/{notificationId}")
+    public List<NotificationReference> getNotificationReferencesByNotificationId(@PathVariable UUID notificationId) {
+        return notificationReferenceService.getNotificationReferencesByNotificationId(notificationId);
+    }
+
+    @GetMapping("/entity/{entityType}/{entityId}")
+    public List<NotificationReference> getNotificationReferencesByEntityTypeAndEntityId(@PathVariable String entityType, @PathVariable UUID entityId) {
+        return notificationReferenceService.getNotificationReferencesByEntityTypeAndEntityId(entityType, entityId);
+    }
+}

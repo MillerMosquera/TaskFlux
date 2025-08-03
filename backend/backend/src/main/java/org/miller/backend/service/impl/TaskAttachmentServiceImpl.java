@@ -1,1 +1,66 @@
-package org.miller.backend.service.impl;import org.miller.backend.model.TaskAttachment;import org.miller.backend.repository.TaskAttachmentRepository;import org.miller.backend.service.TaskAttachmentService;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.stereotype.Service;import java.time.LocalDateTime;import java.util.List;import java.util.Optional;import java.util.UUID;@Servicepublic class TaskAttachmentServiceImpl implements TaskAttachmentService {    @Autowired    private TaskAttachmentRepository taskAttachmentRepository;    @Override    public List<TaskAttachment> getAllTaskAttachments() {        return taskAttachmentRepository.findAll();    }    @Override    public Optional<TaskAttachment> getTaskAttachmentById(UUID id) {        return taskAttachmentRepository.findById(id);    }    @Override    public TaskAttachment createTaskAttachment(TaskAttachment taskAttachment) {        taskAttachment.setId(UUID.fromString(UUID.randomUUID().toString()));        taskAttachment.setUploadedAt(LocalDateTime.now());        return taskAttachmentRepository.save(taskAttachment);    }    @Override    public TaskAttachment updateTaskAttachment(UUID id, TaskAttachment taskAttachmentDetails) {        return taskAttachmentRepository.findById(id)                .map(taskAttachment -> {                    taskAttachment.setTask(taskAttachmentDetails.getTask());                    taskAttachment.setUploadedBy(taskAttachmentDetails.getUploadedBy());                    taskAttachment.setFileUrl(taskAttachmentDetails.getFileUrl());                    taskAttachment.setFileName(taskAttachmentDetails.getFileName());                    taskAttachment.setFileType(taskAttachmentDetails.getFileType());                    // UploadedAt is usually set on creation, but if you want to update it, uncomment below                    // taskAttachment.setUploadedAt(taskAttachmentDetails.getUploadedAt());                    return taskAttachmentRepository.save(taskAttachment);                }).orElseThrow(() -> new RuntimeException("TaskAttachment not found with id " + id));    }    @Override    public void deleteTaskAttachment(UUID id) {        taskAttachmentRepository.deleteById(id);    }    @Override    public List<TaskAttachment> getTaskAttachmentsByTaskId(UUID taskId) {        return taskAttachmentRepository.findByTaskId(taskId);    }    @Override    public List<TaskAttachment> getTaskAttachmentsByUploadedBy(UUID uploadedByUserId) {        return taskAttachmentRepository.findByUploadedBy_Id(uploadedByUserId);    }}
+package org.miller.backend.service.impl;
+
+import org.miller.backend.model.TaskAttachment;
+import org.miller.backend.repository.TaskAttachmentRepository;
+import org.miller.backend.service.TaskAttachmentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+public class TaskAttachmentServiceImpl implements TaskAttachmentService {
+
+    @Autowired
+    private TaskAttachmentRepository taskAttachmentRepository;
+
+    @Override
+    public List<TaskAttachment> getAllTaskAttachments() {
+        return taskAttachmentRepository.findAll();
+    }
+
+    @Override
+    public Optional<TaskAttachment> getTaskAttachmentById(UUID id) {
+        return taskAttachmentRepository.findById(id);
+    }
+
+    @Override
+    public TaskAttachment createTaskAttachment(TaskAttachment taskAttachment) {
+        taskAttachment.setId(UUID.fromString(UUID.randomUUID().toString()));
+        taskAttachment.setUploadedAt(LocalDateTime.now());
+        return taskAttachmentRepository.save(taskAttachment);
+    }
+
+    @Override
+    public TaskAttachment updateTaskAttachment(UUID id, TaskAttachment taskAttachmentDetails) {
+        return taskAttachmentRepository.findById(id)
+                .map(taskAttachment -> {
+                    taskAttachment.setTask(taskAttachmentDetails.getTask());
+                    taskAttachment.setUploadedBy(taskAttachmentDetails.getUploadedBy());
+                    taskAttachment.setFileUrl(taskAttachmentDetails.getFileUrl());
+                    taskAttachment.setFileName(taskAttachmentDetails.getFileName());
+                    taskAttachment.setFileType(taskAttachmentDetails.getFileType());
+                    // UploadedAt is usually set on creation, but if you want to update it, uncomment below
+                    // taskAttachment.setUploadedAt(taskAttachmentDetails.getUploadedAt());
+                    return taskAttachmentRepository.save(taskAttachment);
+                }).orElseThrow(() -> new RuntimeException("TaskAttachment not found with id " + id));
+    }
+
+    @Override
+    public void deleteTaskAttachment(UUID id) {
+        taskAttachmentRepository.deleteById(id);
+    }
+
+    @Override
+    public List<TaskAttachment> getTaskAttachmentsByTaskId(UUID taskId) {
+        return taskAttachmentRepository.findByTaskId(taskId);
+    }
+
+    @Override
+    public List<TaskAttachment> getTaskAttachmentsByUploadedBy(UUID uploadedByUserId) {
+        return taskAttachmentRepository.findByUploadedBy_Id(uploadedByUserId);
+    }
+}

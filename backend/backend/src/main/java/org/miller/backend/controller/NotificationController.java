@@ -1,1 +1,80 @@
-package org.miller.backend.controller;import org.miller.backend.model.Notification;import org.miller.backend.service.NotificationService;import org.springframework.http.HttpStatus;import org.springframework.http.ResponseEntity;import org.springframework.web.bind.annotation.*;import java.util.List;import java.util.UUID;@RestController@RequestMapping("/api/notifications")public class NotificationController {    private final NotificationService notificationService;    public NotificationController(NotificationService notificationService) {        this.notificationService = notificationService;    }    @GetMapping    public List<Notification> getAllNotifications() {        return notificationService.getAllNotifications();    }    @GetMapping("/{id}")    public ResponseEntity<Notification> getNotificationById(@PathVariable String id) {        try {            UUID uuid = UUID.fromString(id);            return notificationService.getNotificationById(uuid)                    .map(ResponseEntity::ok)                    .orElse(ResponseEntity.notFound().build());        } catch (IllegalArgumentException e) {            return ResponseEntity.badRequest().build();        }    }    @PostMapping    public ResponseEntity<Notification> createNotification(@RequestBody Notification notification) {        Notification createdNotification = notificationService.createNotification(notification);        return new ResponseEntity<>(createdNotification, HttpStatus.CREATED);    }    @PutMapping("/{id}")    public ResponseEntity<Notification> updateNotification(@PathVariable UUID id, @RequestBody Notification notificationDetails) {        try {            Notification updatedNotification = notificationService.updateNotification(id, notificationDetails);            return ResponseEntity.ok(updatedNotification);        } catch (RuntimeException e) {            return ResponseEntity.notFound().build();        }    }    @DeleteMapping("/{id}")    public ResponseEntity<Void> deleteNotification(@PathVariable UUID id) {        notificationService.deleteNotification(id);        return ResponseEntity.noContent().build();    }    @GetMapping("/user/{userId}")    public List<Notification> getNotificationsByUserId(@PathVariable UUID userId) {        return notificationService.getNotificationsByUserId(userId);    }    @GetMapping("/user/{userId}/unread")    public List<Notification> getUnreadNotificationsByUserId(@PathVariable UUID userId) {        return notificationService.getUnreadNotificationsByUserId(userId);    }    @PatchMapping("/{id}/read")    public ResponseEntity<Notification> markNotificationAsRead(@PathVariable UUID id) {        try {            Notification updatedNotification = notificationService.markNotificationAsRead(id);            return ResponseEntity.ok(updatedNotification);        } catch (RuntimeException e) {            return ResponseEntity.notFound().build();        }    }}
+package org.miller.backend.controller;
+
+import org.miller.backend.model.Notification;
+import org.miller.backend.service.NotificationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/notifications")
+public class NotificationController {
+
+    private final NotificationService notificationService;
+
+    public NotificationController(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
+
+    @GetMapping
+    public List<Notification> getAllNotifications() {
+        return notificationService.getAllNotifications();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Notification> getNotificationById(@PathVariable String id) {
+        try {
+            UUID uuid = UUID.fromString(id);
+            return notificationService.getNotificationById(uuid)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<Notification> createNotification(@RequestBody Notification notification) {
+        Notification createdNotification = notificationService.createNotification(notification);
+        return new ResponseEntity<>(createdNotification, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Notification> updateNotification(@PathVariable UUID id, @RequestBody Notification notificationDetails) {
+        try {
+            Notification updatedNotification = notificationService.updateNotification(id, notificationDetails);
+            return ResponseEntity.ok(updatedNotification);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteNotification(@PathVariable UUID id) {
+        notificationService.deleteNotification(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Notification> getNotificationsByUserId(@PathVariable UUID userId) {
+        return notificationService.getNotificationsByUserId(userId);
+    }
+
+    @GetMapping("/user/{userId}/unread")
+    public List<Notification> getUnreadNotificationsByUserId(@PathVariable UUID userId) {
+        return notificationService.getUnreadNotificationsByUserId(userId);
+    }
+
+    @PatchMapping("/{id}/read")
+    public ResponseEntity<Notification> markNotificationAsRead(@PathVariable UUID id) {
+        try {
+            Notification updatedNotification = notificationService.markNotificationAsRead(id);
+            return ResponseEntity.ok(updatedNotification);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+}
