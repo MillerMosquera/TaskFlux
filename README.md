@@ -1,7 +1,5 @@
 # TaskFlux 
 
-![TaskFlux Logo](./frontend/public/logo.png)
-
 Un sistema moderno de gestión de tareas y proyectos construido con React, TypeScript y Spring Boot.
 
 ## 📋 Tabla de Contenidos
